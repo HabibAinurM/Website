@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel – Alif Catering</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red: #C8102E; --red-dark: #9E0C25; --red-light: #fff0f2; --red-dim: rgba(200,16,46,0.12);
+      --bg: #0d0d0f; --surface: #16161a; --surface2: #1e1e24; --surface3: #26262e;
+      --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.05);
+      --text: #f0f0f0; --text-dim: #9a9aaa; --text-muted: #5a5a6a;
+      --green: #22c55e; --yellow: #f59e0b; --blue: #3b82f6;
+      --shadow: 0 4px 24px rgba(0,0,0,0.4);
+      --radius: 14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+    /* ===== LOGIN ===== */
+    #loginScreen {
+      position: fixed; inset: 0; background: var(--bg); z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .login-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 24px; padding: 48px 40px; width: 380px;
+      box-shadow: 0 0 80px rgba(200,16,46,0.08);
+    }
+    .login-logo { text-align: center; margin-bottom: 32px; }
+    .login-logo-icon {
+      width: 64px; height: 64px; background: var(--red); border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; color: white; font-weight: 800; font-size: 28px;
+      margin: 0 auto 12px;
+    }
+    .login-logo h1 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
+    .login-logo p { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+    .login-label { font-size: 13px; font-weight: 600; color: var(--text-dim); margin-bottom: 8px; display: block; }
+    .login-input {
+      width: 100%; background: var(--surface2); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 12px 14px; color: var(--text); font-size: 14px;
+      font-family: 'DM Sans', sans-serif; margin-bottom: 16px; outline: none; transition: border-color 0.2s;
+    }
+    .login-input:focus { border-color: var(--red); }
+    .login-btn {
+      width: 100%; background: var(--red); color: white; border: none; border-radius: 10px;
+      padding: 14px; font-size: 15px; font-weight: 700; font-family: 'Syne', sans-serif;
+      cursor: pointer; transition: all 0.2s; margin-top: 4px;
+    }
+    .login-btn:hover { background: var(--red-dark); }
+    .login-hint { text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 16px; }
+    .login-error { color: #ff6b6b; font-size: 13px; text-align: center; margin-bottom: 12px; display: none; }
+
+    /* ===== LAYOUT ===== */
+    #app { display: none; min-height: 100vh; }
+    .sidebar {
+      width: 240px; background: var(--surface); border-right: 1px solid var(--border);
+      position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+      display: flex; flex-direction: column; transition: transform 0.3s;
+    }
+    .sidebar-logo {
+      padding: 24px 20px; display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-logo-icon {
+      width: 38px; height: 38px; background: var(--red); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; color: white; font-weight: 800; font-size: 18px;
+    }
+    .sidebar-logo-text { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; }
+    .sidebar-logo-text span { color: var(--red); }
+    .sidebar-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+    .nav-section { margin-bottom: 24px; }
+    .nav-section-label { font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; padding: 0 8px; margin-bottom: 8px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px;
+      font-size: 14px; font-weight: 500; color: var(--text-dim); cursor: pointer;
+      transition: all 0.2s; margin-bottom: 2px;
+    }
+    .nav-item:hover { background: var(--surface2); color: var(--text); }
+    .nav-item.active { background: var(--red-dim); color: var(--red); font-weight: 600; }
+    .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
+    .sidebar-footer { padding: 16px 12px; border-top: 1px solid var(--border); }
+    .main-content { margin-left: 240px; min-height: 100vh; }
+    .topbar {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0 28px; height: 64px; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .topbar-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .topbar-preview {
+      background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+      border-radius: 8px; padding: 7px 14px; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px;
+    }
+    .topbar-preview:hover { border-color: var(--red); color: var(--red); }
+    .topbar-user {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--surface2); border-radius: 10px; padding: 6px 12px;
+    }
+    .user-avatar { width: 32px; height: 32px; background: var(--red); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+    .user-name { font-size: 13px; font-weight: 600; }
+    .page-content { padding: 28px; }
+
+    /* ===== CARDS & COMPONENTS ===== */
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 20px; transition: all 0.2s;
+    }
+    .stat-card:hover { border-color: var(--red); transform: translateY(-2px); }
+    .stat-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .stat-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .stat-icon.red { background: var(--red-dim); }
+    .stat-icon.green { background: rgba(34,197,94,0.12); }
+    .stat-icon.yellow { background: rgba(245,158,11,0.12); }
+    .stat-icon.blue { background: rgba(59,130,246,0.12); }
+    .stat-badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 50px; }
+    .stat-badge.up { background: rgba(34,197,94,0.12); color: var(--green); }
+    .stat-badge.neutral { background: var(--surface2); color: var(--text-dim); }
+    .stat-num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+    .stat-label { font-size: 13px; color: var(--text-dim); }
+    .card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      margin-bottom: 24px;
+    }
+    .card-header {
+      padding: 18px 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-header h3 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+    .card-body { padding: 20px; }
+    .btn {
+      border: none; border-radius: 9px; padding: 9px 16px; font-size: 13px;
+      font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .btn-red { background: var(--red); color: white; }
+    .btn-red:hover { background: var(--red-dark); }
+    .btn-ghost { background: var(--surface2); color: var(--text-dim); border: 1px solid var(--border); }
+    .btn-ghost:hover { color: var(--text); border-color: var(--text-muted); }
+    .btn-danger { background: rgba(239,68,68,0.12); color: #ef4444; }
+    .btn-danger:hover { background: rgba(239,68,68,0.2); }
+    .btn-success { background: rgba(34,197,94,0.12); color: var(--green); }
+    .btn-success:hover { background: rgba(34,197,94,0.2); }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+    /* ===== TABLE ===== */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    td { padding: 14px; border-bottom: 1px solid var(--border2); font-size: 14px; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface2); }
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 50px; font-size: 11px; font-weight: 700; }
+    .badge-active { background: rgba(34,197,94,0.12); color: var(--green); }
+    .badge-inactive { background: var(--surface3); color: var(--text-dim); }
+    .badge-featured { background: var(--red-dim); color: var(--red); }
+
+    /* ===== FORMS ===== */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { display: block; font-size: 12px; font-weight: 600; color: var(--text-dim); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select {
+      width: 100%; background: var(--surface2); border: 1.5px solid var(--border);
+      border-radius: 9px; padding: 10px 14px; color: var(--text); font-size: 14px;
+      font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--red); }
+    textarea { resize: vertical; min-height: 90px; }
+    select option { background: var(--surface2); }
+    .emoji-picker { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; background: var(--surface2); border-radius: 9px; border: 1.5px solid var(--border); }
+    .emoji-opt { font-size: 24px; cursor: pointer; padding: 6px; border-radius: 8px; transition: 0.15s; border: 2px solid transparent; }
+    .emoji-opt:hover { background: var(--surface3); }
+    .emoji-opt.selected { border-color: var(--red); background: var(--red-dim); }
+    .color-picker { display: flex; flex-wrap: wrap; gap: 8px; }
+    .color-opt { width: 32px; height: 32px; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: 0.15s; }
+    .color-opt.selected { border-color: white; transform: scale(1.15); }
+    .form-hint { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+      width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+      transform: scale(0.95); transition: transform 0.25s;
+    }
+    .modal-overlay.open .modal { transform: scale(1); }
+    .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .modal-header h2 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
+    .modal-close { background: none; border: none; color: var(--text-dim); font-size: 20px; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: 0.2s; }
+    .modal-close:hover { background: var(--surface2); color: var(--text); }
+    .modal-body { padding: 24px; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+
+    /* ===== TOAST ===== */
+    .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9000; display: flex; flex-direction: column; gap: 8px; }
+    .toast-item {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 20px; font-size: 14px; font-weight: 500; min-width: 240px;
+      box-shadow: var(--shadow); animation: slideInRight 0.3s ease;
+      display: flex; align-items: center; gap: 8px;
+    }
+    @keyframes slideInRight { from { opacity:0; transform:translateX(30px); } to { opacity:1; transform:none; } }
+    .toast-item.success { border-left: 3px solid var(--green); }
+    .toast-item.error { border-left: 3px solid #ef4444; }
+    .toast-item.info { border-left: 3px solid var(--blue); }
+
+    /* ===== TABS ===== */
+    .tabs { display: flex; gap: 4px; background: var(--surface2); border-radius: 10px; padding: 4px; margin-bottom: 24px; }
+    .tab { flex: 1; text-align: center; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text-dim); transition: all 0.2s; }
+    .tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 8px rgba(0,0,0,0.3); }
+
+    /* ===== TOGGLE ===== */
+    .toggle { position: relative; width: 42px; height: 24px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--surface3); border-radius: 50px; cursor: pointer; transition: 0.2s; }
+    .toggle-slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+    input:checked + .toggle-slider { background: var(--green); }
+    input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+    /* ===== DRAG INDICATOR ===== */
+    .drag-handle { cursor: grab; color: var(--text-muted); font-size: 16px; padding: 4px; }
+    .drag-handle:active { cursor: grabbing; }
+
+    /* ===== SEARCH ===== */
+    .search-bar { position: relative; }
+    .search-bar input { padding-left: 36px; background: var(--surface2); }
+    .search-bar::before { content: '🔍'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; z-index: 1; }
+
+    /* ===== ORDER ITEM ===== */
+    .order-item { display: flex; align-items: flex-start; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--border2); }
+    .order-item:last-child { border: none; }
+    .order-avatar { width: 44px; height: 44px; border-radius: 10px; background: var(--surface3); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .order-info { flex: 1; }
+    .order-name { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+    .order-detail { font-size: 13px; color: var(--text-dim); }
+
+    /* ===== SETTINGS ===== */
+    .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border2); }
+    .setting-row:last-child { border: none; }
+    .setting-info h4 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .setting-info p { font-size: 13px; color: var(--text-dim); }
+
+    /* ===== PAGE VISIBILITY ===== */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    /* ===== MOBILE ===== */
+    .menu-toggle { display: none; background: none; border: none; color: var(--text); font-size: 22px; cursor: pointer; }
+    @media(max-width:900px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: none; }
+      .main-content { margin-left: 0; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .menu-toggle { display: block; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    @media(max-width:540px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .page-content { padding: 16px; }
+    }
+
+    /* ===== ACTIVITY ===== */
+    .activity-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border2); }
+    .activity-item:last-child { border: none; }
+    .activity-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+    .activity-text { font-size: 13px; line-height: 1.6; }
+    .activity-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* ===== CHAR COUNTER ===== */
+    .char-count { font-size: 11px; color: var(--text-muted); text-align: right; margin-top: 4px; }
+    .char-count.warn { color: var(--yellow); }
+    .char-count.error { color: #ef4444; }
+
+    /* ===== PREVIEW CARD ===== */
+    .preview-pkg {
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 14px;
+      overflow: hidden; transition: all 0.2s;
+    }
+    .preview-pkg-img { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+    .preview-pkg-body { padding: 14px; }
+    .preview-pkg-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .preview-pkg-price { font-size: 13px; color: var(--red); font-weight: 700; }
+  </style>
+</head>
+<body>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">A</div>
+      <h1>Admin Panel</h1>
+      <p>Alif Catering Management</p>
+    </div>
+    <div class="login-error" id="loginError">Username atau password salah!</div>
+    <label class="login-label" for="loginUser">Username</label>
+    <input class="login-input" type="text" id="loginUser" placeholder="admin" />
+    <label class="login-label" for="loginPass">Password</label>
+    <input class="login-input" type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" />
+    <button class="login-btn" onclick="doLogin()">🔐 Masuk ke Dashboard</button>
+    <p class="login-hint">Demo: admin / admin123</p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">A</div>
+      <div class="sidebar-logo-text">Alif <span>Catering</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-label">Utama</div>
+        <div class="nav-item active" onclick="switchPage('dashboard',this)"><span class="icon">📊</span> Dashboard</div>
+        <div class="nav-item" onclick="switchPage('packages',this)"><span class="icon">🍱</span> Kelola Paket</div>
+        <div class="nav-item" onclick="switchPage('testimonials',this)"><span class="icon">💬</span> Testimoni</div>
+        <div class="nav-item" onclick="switchPage('messages',this)"><span class="icon">📩</span> Pesan Masuk <span id="msgBadge" style="margin-left:auto;background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:50px;">3</span></div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Konten</div>
+        <div class="nav-item" onclick="switchPage('hero',this)"><span class="icon">🏠</span> Hero & Tagline</div>
+        <div class="nav-item" onclick="switchPage('about',this)"><span class="icon">ℹ️</span> Tentang Kami</div>
+        <div class="nav-item" onclick="switchPage('settings',this)"><span class="icon">⚙️</span> Pengaturan</div>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="nav-item" onclick="doLogout()"><span class="icon">🚪</span> Keluar</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+        <div class="topbar-title" id="pageTitle">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-preview" onclick="window.open('index.html','_blank')">🌐 Lihat Website</button>
+        <div class="topbar-user">
+          <div class="user-avatar">A</div>
+          <div class="user-name">Admin</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- ============================== DASHBOARD ============================== -->
+      <div class="page-section active" id="sec-dashboard">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-top"><div class="stat-icon red">🍱</div><span class="stat-badge up">+2 baru</span></div>
+            <div class="stat-num" id="stat-paket">5</div>
+            <div class="stat-label">Total Paket Aktif</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><div class="stat-icon green">💬</div><span class="stat-badge up">+1 baru</span></div>
+            <div class="stat-num" id="stat-testi">3</div>
+            <div class="stat-label">Testimoni Tayang</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><div class="stat-icon yellow">📩</div><span class="stat-badge neutral">3 belum dibaca</span></div>
+            <div class="stat-num">3</div>
+            <div class="stat-label">Pesan Masuk</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-top"><div class="stat-icon blue">📅</div><span class="stat-badge up">Aktif</span></div>
+            <div class="stat-num">✓</div>
+            <div class="stat-label">Website Online</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+          <!-- Recent Messages -->
+          <div class="card">
+            <div class="card-header">
+              <h3>📩 Pesan Terbaru</h3>
+              <button class="btn btn-ghost btn-sm" onclick="switchPage('messages',null)">Lihat Semua →</button>
+            </div>
+            <div class="card-body" id="recentMsgContainer"></div>
+          </div>
+          <!-- Activity Log -->
+          <div class="card">
+            <div class="card-header"><h3>📋 Aktivitas Terkini</h3></div>
+            <div class="card-body" id="activityLog"></div>
+          </div>
+        </div>
+
+        <!-- Quick Preview Packages -->
+        <div class="card">
+          <div class="card-header">
+            <h3>🍱 Pratinjau Paket</h3>
+            <button class="btn btn-red btn-sm" onclick="switchPage('packages',null)">Kelola Paket</button>
+          </div>
+          <div class="card-body">
+            <div id="pkgPreviewGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================== PACKAGES ============================== -->
+      <div class="page-section" id="sec-packages">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+          <div></div>
+          <button class="btn btn-red" onclick="openPackageModal()">➕ Tambah Paket</button>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Daftar Paket Catering</h3>
+            <div class="search-bar" style="width:220px;"><input type="text" placeholder="Cari paket..." oninput="filterPackages(this.value)" /></div>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <div class="table-wrap">
+              <table id="packagesTable">
+                <thead>
+                  <tr><th></th><th>Paket</th><th>Harga</th><th>Kategori</th><th>Status</th><th>Unggulan</th><th>Aksi</th></tr>
+                </thead>
+                <tbody id="packagesTbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================== TESTIMONIALS ============================== -->
+      <div class="page-section" id="sec-testimonials">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:24px;">
+          <button class="btn btn-red" onclick="openTestiModal()">➕ Tambah Testimoni</button>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Daftar Testimoni</h3></div>
+          <div class="card-body" style="padding:0;">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Nama</th><th>Acara</th><th>Rating</th><th>Komentar</th><th>Status</th><th>Aksi</th></tr></thead>
+                <tbody id="testiTbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================== MESSAGES ============================== -->
+      <div class="page-section" id="sec-messages">
+        <div class="tabs">
+          <div class="tab active" onclick="filterMsg('all',this)">Semua</div>
+          <div class="tab" onclick="filterMsg('unread',this)">Belum Dibaca</div>
+          <div class="tab" onclick="filterMsg('read',this)">Sudah Dibaca</div>
+        </div>
+        <div class="card">
+          <div class="card-body" style="padding:0;">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Pengirim</th><th>No. HP</th><th>Acara</th><th>Pesan</th><th>Waktu</th><th>Status</th><th>Aksi</th></tr></thead>
+                <tbody id="msgTbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================== HERO ============================== -->
+      <div class="page-section" id="sec-hero">
+        <div class="card">
+          <div class="card-header"><h3>✏️ Kelola Hero & Tagline</h3></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Headline Utama (H1)</label>
+              <input type="text" id="heroHeadline" />
+              <div class="form-hint">Tampil besar di bagian atas website</div>
+            </div>
+            <div class="form-group">
+              <label>Sub-headline</label>
+              <input type="text" id="heroSub" />
+            </div>
+            <div class="form-group">
+              <label>Teks Tombol CTA</label>
+              <input type="text" id="heroCta" />
+            </div>
+            <div class="form-group">
+              <label>Badge Hero (teks kecil di atas headline)</label>
+              <input type="text" id="heroBadge" />
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label>Statistik 1 – Angka</label>
+                <input type="text" id="stat1num" />
+              </div>
+              <div class="form-group">
+                <label>Statistik 1 – Label</label>
+                <input type="text" id="stat1lbl" />
+              </div>
+              <div class="form-group">
+                <label>Statistik 2 – Angka</label>
+                <input type="text" id="stat2num" />
+              </div>
+              <div class="form-group">
+                <label>Statistik 2 – Label</label>
+                <input type="text" id="stat2lbl" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Keunggulan (pisahkan dengan koma)</label>
+              <input type="text" id="heroPerks" />
+              <div class="form-hint">Contoh: Bahan Fresh & Halal, Harga Terjangkau, Bisa Request Menu</div>
+            </div>
+            <button class="btn btn-red" onclick="saveHero()">💾 Simpan Hero</button>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="card">
+          <div class="card-header"><h3>👁️ Pratinjau Real-time</h3></div>
+          <div class="card-body">
+            <div style="background:linear-gradient(135deg,#1a0008,#4a0a1e);border-radius:16px;padding:32px;color:white;">
+              <div id="prevBadge" style="display:inline-block;background:rgba(200,16,46,0.2);border:1px solid rgba(200,16,46,0.3);color:#ff8fa3;border-radius:50px;padding:5px 14px;font-size:12px;font-weight:600;margin-bottom:14px;"></div>
+              <h2 id="prevHeadline" style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;line-height:1.2;margin-bottom:10px;"></h2>
+              <p id="prevSub" style="font-size:14px;opacity:0.7;margin-bottom:20px;line-height:1.6;"></p>
+              <div id="prevPerks" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================== ABOUT ============================== -->
+      <div class="page-section" id="sec-about">
+        <div class="card">
+          <div class="card-header"><h3>✏️ Kelola Tentang Kami</h3></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Nama Usaha</label>
+              <input type="text" id="aboutName" value="Alif Catering" />
+            </div>
+            <div class="form-group">
+              <label>Deskripsi Singkat</label>
+              <textarea id="aboutDesc" rows="3"></textarea>
+              <div class="char-count" id="aboutDescCount">0 / 300 karakter</div>
+            </div>
+            <div class="form-group">
+              <label>Paragraf Panjang</label>
+              <textarea id="aboutLong" rows="5"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div class="form-group">
+                <label>Visi</label>
+                <textarea id="aboutVisi" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Misi</label>
+                <textarea id="aboutMisi" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Komitmen</label>
+                <textarea id="aboutKomitmen" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Nilai</label>
+                <textarea id="aboutNilai" rows="3"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Angka Statistik (Acara Sukses)</label>
+              <input type="text" id="aboutStat" value="500+" />
+            </div>
+            <button class="btn btn-red" onclick="saveAbout()">💾 Simpan Tentang Kami</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================== SETTINGS ============================== -->
+      <div class="page-section" id="sec-settings">
+        <div class="card">
+          <div class="card-header"><h3>⚙️ Pengaturan Website</h3></div>
+          <div class="card-body">
+            <div class="setting-row">
+              <div class="setting-info"><h4>Nomor WhatsApp</h4><p>Nomor yang akan dihubungi pelanggan</p></div>
+              <input type="text" id="setWA" style="width:200px;" placeholder="+62 812-xxxx-xxxx" />
+            </div>
+            <div class="setting-row">
+              <div class="setting-info"><h4>Alamat Lengkap</h4><p>Ditampilkan di halaman kontak</p></div>
+              <input type="text" id="setAlamat" style="width:280px;" placeholder="Jl. Raya Madiun..." />
+            </div>
+            <div class="setting-row">
+              <div class="setting-info"><h4>Email Bisnis</h4><p>Email kontak yang ditampilkan</p></div>
+              <input type="email" id="setEmail" style="width:220px;" placeholder="catering@email.com" />
+            </div>
+            <div class="setting-row">
+              <div class="setting-info"><h4>Jam Operasional – Weekday</h4><p>Senin – Sabtu</p></div>
+              <input type="text" id="setJamWD" style="width:180px;" placeholder="07.00 – 21.00 WIB" />
+            </div>
+            <div class="setting-row">
+              <div class="setting-info"><h4>Jam Operasional – Weekend</h4><p>Minggu & Libur</p></div>
+              <input type="text" id="setJamWE" style="width:180px;" placeholder="08.00 – 18.00 WIB" />
+            </div>
+            <div class="setting-row">
+              <div class="setting-info"><h4>Meta Description SEO</h4><p>Deskripsi yang muncul di Google</p></div>
+              <textarea id="setMeta" style="width:320px;min-height:70px;"></textarea>
+            </div>
+            <div class="setting-row">
+              <div class="setting-info"><h4>Tampilkan Keranjang</h4><p>Aktifkan fitur keranjang di website</p></div>
+              <label class="toggle"><input type="checkbox" id="setCart" checked /><span class="toggle-slider"></span></label>
+            </div>
+            <div class="setting-row">
+              <div class="setting-info"><h4>Tombol WA Floating</h4><p>Tombol WhatsApp kanan bawah</p></div>
+              <label class="toggle"><input type="checkbox" id="setWAFloat" checked /><span class="toggle-slider"></span></label>
+            </div>
+            <div style="margin-top:20px;">
+              <button class="btn btn-red" onclick="saveSettings()">💾 Simpan Pengaturan</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Password Change -->
+        <div class="card">
+          <div class="card-header"><h3>🔐 Ganti Password Admin</h3></div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:end;">
+              <div class="form-group" style="margin:0;"><label>Password Lama</label><input type="password" id="oldPass" /></div>
+              <div class="form-group" style="margin:0;"><label>Password Baru</label><input type="password" id="newPass" /></div>
+              <button class="btn btn-ghost" onclick="changePass()">🔑 Ubah Password</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end page-content -->
+  </div><!-- end main-content -->
+</div><!-- end app -->
+
+<!-- ======================== MODAL PAKET ======================== -->
+<div class="modal-overlay" id="pkgModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="pkgModalTitle">Tambah Paket</h2>
+      <button class="modal-close" onclick="closePkgModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="pkgEditId" />
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nama Paket</label>
+          <input type="text" id="pkgName" placeholder="Contoh: Paket Nasi Box" />
+        </div>
+        <div class="form-group">
+          <label>Harga Dasar (Rp)</label>
+          <input type="number" id="pkgPrice" placeholder="20000" />
+        </div>
+        <div class="form-group">
+          <label>Catatan Harga</label>
+          <input type="text" id="pkgPriceNote" placeholder="mulai Rp 20.000 / pcs (min. 25 pcs)" />
+        </div>
+        <div class="form-group">
+          <label>Kategori</label>
+          <select id="pkgCategory">
+            <option>Nasi Box</option><option>Prasmanan</option><option>Aqiqah</option>
+            <option>Snack Box</option><option>Catering Harian</option><option>Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Deskripsi Singkat</label>
+          <textarea id="pkgDesc" rows="3" placeholder="Deskripsi paket..."></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Isi Paket (pisahkan enter)</label>
+          <textarea id="pkgIncludes" rows="5" placeholder="Nasi putih / nasi uduk&#10;Lauk pilihan&#10;Sayur tumis"></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Ikon Emoji</label>
+          <div class="emoji-picker" id="emojiPicker"></div>
+        </div>
+        <div class="form-group full">
+          <label>Warna Kartu</label>
+          <div class="color-picker" id="colorPicker"></div>
+          <div class="form-hint">Warna background foto pada kartu paket</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center;margin-top:8px;">
+        <div>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <label class="toggle"><input type="checkbox" id="pkgActive" checked /><span class="toggle-slider"></span></label>
+            <span style="font-size:13px;font-weight:600;color:var(--text-dim);">Aktif / Tampilkan di Website</span>
+          </label>
+        </div>
+        <div>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+            <label class="toggle"><input type="checkbox" id="pkgFeatured" /><span class="toggle-slider"></span></label>
+            <span style="font-size:13px;font-weight:600;color:var(--text-dim);">Tandai sebagai Terlaris</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closePkgModal()">Batal</button>
+      <button class="btn btn-red" onclick="savePackage()">💾 Simpan Paket</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== MODAL TESTIMONI ======================== -->
+<div class="modal-overlay" id="testiModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="testiModalTitle">Tambah Testimoni</h2>
+      <button class="modal-close" onclick="closeTestiModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="testiEditId" />
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nama Pelanggan</label>
+          <input type="text" id="testiName" placeholder="Bu Siti Rahayu" />
+        </div>
+        <div class="form-group">
+          <label>Acara / Asal</label>
+          <input type="text" id="testiRole" placeholder="Acara Ulang Tahun – Madiun" />
+        </div>
+        <div class="form-group">
+          <label>Rating (1–5)</label>
+          <select id="testiRating">
+            <option value="5">⭐⭐⭐⭐⭐ — 5 Bintang</option>
+            <option value="4">⭐⭐⭐⭐ — 4 Bintang</option>
+            <option value="3">⭐⭐⭐ — 3 Bintang</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ikon Avatar</label>
+          <select id="testiAvatar">
+            <option value="👩">👩 Perempuan</option>
+            <option value="👨">👨 Laki-laki</option>
+            <option value="👴">👴 Bapak Tua</option>
+            <option value="👵">👵 Ibu Tua</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Komentar / Testimoni</label>
+          <textarea id="testiText" rows="4" placeholder="Tulis komentar pelanggan..."></textarea>
+        </div>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-top:8px;">
+        <label class="toggle"><input type="checkbox" id="testiActive" checked /><span class="toggle-slider"></span></label>
+        <span style="font-size:13px;font-weight:600;color:var(--text-dim);">Tampilkan di Website</span>
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeTestiModal()">Batal</button>
+      <button class="btn btn-red" onclick="saveTestimoni()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== MODAL PESAN DETAIL ======================== -->
+<div class="modal-overlay" id="msgModal">
+  <div class="modal">
+    <div class="modal-header"><h2>📩 Detail Pesan</h2><button class="modal-close" onclick="closeMsgModal()">✕</button></div>
+    <div class="modal-body" id="msgModalBody"></div>
+    <div class="modal-footer" id="msgModalFooter"></div>
+  </div>
+</div>
+
+<script>
+// ===============================================
+// DATA STORE (localStorage-based CMS)
+// ===============================================
+const KEYS = { packages:'ac_packages', testis:'ac_testis', messages:'ac_messages', hero:'ac_hero', about:'ac_about', settings:'ac_settings', activity:'ac_activity', adminPass:'ac_adminpass' };
+const get = k => { try { return JSON.parse(localStorage.getItem(k)); } catch(e) { return null; } };
+const set = (k,v) => localStorage.setItem(k, JSON.stringify(v));
+
+// Seed default data if empty
+function seedData() {
+  if (!get(KEYS.packages)) set(KEYS.packages, [
+    { id:1, name:'Paket Nasi Box', emoji:'🍱', color:'linear-gradient(135deg,#f5a623,#f0761a)', desc:'Nasi box lengkap dengan lauk pilihan, sayur, kerupuk, dan buah.', includes:['Nasi putih / nasi uduk','Lauk pilihan (ayam/daging/ikan)','Sayur tumis','Kerupuk & sambal','Buah / dessert'], price:20000, priceNote:'mulai Rp 20.000 / pcs (min. 25 pcs)', category:'Nasi Box', active:true, featured:false },
+    { id:2, name:'Paket Prasmanan', emoji:'🍽️', color:'linear-gradient(135deg,#e25d6a,#C8102E)', desc:'Paket prasmanan lengkap untuk acara pernikahan, khitanan, dan hajatan.', includes:['5–7 menu lauk pauk','Nasi putih dan nasi gurih','Sup / soto pilihan','Minuman es & panas','Setup meja & peralatan'], price:45000, priceNote:'mulai Rp 45.000 / orang (min. 50 orang)', category:'Prasmanan', active:true, featured:true },
+    { id:3, name:'Paket Aqiqah', emoji:'🐑', color:'linear-gradient(135deg,#4CAF50,#2E7D32)', desc:'Paket aqiqah lengkap dengan kambing guling yang lezat.', includes:['Kambing guling / sate / gulai','Nasi putih / nasi kebuli','Sayur + pelengkap','Kerupuk & acar','Bungkus dus atau prasmanan'], price:850000, priceNote:'mulai Rp 850.000 / ekor kambing', category:'Aqiqah', active:true, featured:false },
+    { id:4, name:'Paket Snack Box', emoji:'🧁', color:'linear-gradient(135deg,#9c27b0,#673ab7)', desc:'Snack box untuk coffee break, seminar, dan gathering kantor.', includes:['3–5 jenis kue/snack','Minuman kotak / air mineral','Packaging rapi & higienis','Bisa request jenis snack','Tersedia kue tradisional'], price:12000, priceNote:'mulai Rp 12.000 / pcs (min. 50 pcs)', category:'Snack Box', active:true, featured:false },
+    { id:5, name:'Catering Harian', emoji:'🥘', color:'linear-gradient(135deg,#00bcd4,#0097a7)', desc:'Layanan catering harian untuk karyawan, kost, atau keluarga.', includes:['Menu berganti setiap hari','Nasi + 2 lauk + sayur','Pengiriman pagi & siang','Harga spesial langganan','Bisa request diet khusus'], price:15000, priceNote:'mulai Rp 15.000 / porsi (berlangganan)', category:'Catering Harian', active:true, featured:false }
+  ]);
+  if (!get(KEYS.testis)) set(KEYS.testis, [
+    { id:1, name:'Bu Siti Rahayu', role:'Acara Ulang Tahun – Madiun', rating:5, text:'Makanannya enak banget! Saya pesan untuk acara ulang tahun anak, tamunya pada senang. Porsinya juga besar, tidak mengecewakan. Pasti pesan lagi!', avatar:'👩', active:true },
+    { id:2, name:'Pak Budi Santoso', role:'Acara Aqiqah – Madiun', rating:5, text:'Sudah 3 kali pesan paket aqiqah di sini. Selalu puas! Pelayanannya ramah, pengiriman tepat waktu, dan yang penting harganya sangat reasonable.', avatar:'👨', active:true },
+    { id:3, name:'Ibu Dewi Kartika', role:'Catering Harian – Kantor', rating:5, text:'Recomended banget untuk catering harian kantor kami. Variasinya banyak, rasanya tidak membosankan. Tim Alif Catering sangat profesional dan responsif.', avatar:'👩', active:true }
+  ]);
+  if (!get(KEYS.messages)) set(KEYS.messages, [
+    { id:1, nama:'Budi Hartono', hp:'08123456789', acara:'Prasmanan Pernikahan', pesan:'Halo, saya mau tanya paket prasmanan untuk 200 orang. Kira-kira berapa harganya?', waktu:'2024-01-15 10:30', read:false },
+    { id:2, nama:'Siti Nurhaliza', hp:'08234567890', acara:'Aqiqah', pesan:'Mau pesan paket aqiqah untuk 2 ekor kambing. Bisa diantar ke Madiun kota?', waktu:'2024-01-14 14:20', read:false },
+    { id:3, nama:'Ahmad Fauzi', hp:'08345678901', acara:'Nasi Box', pesan:'Butuh nasi box 50 pcs untuk rapat kantor hari Jumat. Bisa konfirmasi ketersediaan?', waktu:'2024-01-14 09:15', read:false }
+  ]);
+  if (!get(KEYS.hero)) set(KEYS.hero, {
+    headline:'Hidangan Lezat untuk Setiap Momen Spesial',
+    sub:'Melayani Catering Harian, Aqiqah, Prasmanan & Event',
+    cta:'Pesan Sekarang', badge:'🍽️ Catering Halal & Terpercaya Madiun',
+    perks:'Bahan Fresh & Halal,Harga Terjangkau,Bisa Request Menu,Tepat Waktu & Higienis',
+    stat1num:'500+', stat1lbl:'Pelanggan Puas', stat2num:'5★', stat2lbl:'Rating Rata-rata'
+  });
+  if (!get(KEYS.about)) set(KEYS.about, {
+    name:'Alif Catering', desc:'Catering halal & terpercaya untuk setiap momen spesial Anda di Madiun, Jawa Timur.',
+    long:'Alif Catering berdiri sejak 2021 di Madiun, Jawa Timur. Kami hadir dengan misi menghadirkan hidangan berkualitas dengan harga terjangkau untuk setiap momen spesial keluarga Indonesia.',
+    visi:'Menjadi catering pilihan utama di Madiun yang terpercaya, halal, dan berkualitas.',
+    misi:'Menghadirkan hidangan lezat dengan bahan segar, harga bersahabat, dan pelayanan tulus.',
+    komitmen:'Setiap pesanan dikerjakan dengan penuh tanggung jawab dan standar higienis ketat.',
+    nilai:'Kepuasan pelanggan adalah kebanggaan kami. Setiap gigitan adalah karya hati kami.',
+    stat:'500+'
+  });
+  if (!get(KEYS.settings)) set(KEYS.settings, {
+    wa:'+62 812-3456-7890', alamat:'Jl. Raya Madiun No. 123, Madiun, Jawa Timur 63211',
+    email:'alifcatering@gmail.com', jamWD:'07.00 – 21.00 WIB', jamWE:'08.00 – 18.00 WIB',
+    meta:'Alif Catering melayani nasi box, prasmanan, aqiqah dan catering harian dengan harga terjangkau.',
+    showCart:true, showWAFloat:true
+  });
+  if (!get(KEYS.activity)) set(KEYS.activity, [
+    { text:'Paket Prasmanan diperbarui', time:'1 menit lalu', color:'#C8102E' },
+    { text:'Testimoni baru dari Bu Dewi ditambahkan', time:'5 menit lalu', color:'#22c55e' },
+    { text:'Pesan baru dari Ahmad Fauzi masuk', time:'15 menit lalu', color:'#f59e0b' },
+    { text:'Pengaturan WhatsApp diperbarui', time:'1 jam lalu', color:'#3b82f6' }
+  ]);
+  if (!get(KEYS.adminPass)) set(KEYS.adminPass, 'admin123');
+}
+seedData();
+
+// ===============================================
+// HELPERS
+// ===============================================
+function formatRp(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
+function stars(n) { return '★'.repeat(n) + '☆'.repeat(5-n); }
+function logActivity(text, color='#C8102E') {
+  const acts = get(KEYS.activity) || [];
+  acts.unshift({ text, time:'Baru saja', color });
+  set(KEYS.activity, acts.slice(0,20));
+  renderActivity();
+}
+function showToast(msg, type='success') {
+  const c = document.getElementById('toastContainer');
+  const d = document.createElement('div');
+  d.className = `toast-item ${type}`;
+  const icons = { success:'✅', error:'❌', info:'ℹ️' };
+  d.innerHTML = `<span>${icons[type]||'ℹ️'}</span> ${msg}`;
+  c.appendChild(d);
+  setTimeout(() => d.remove(), 3500);
+}
+function confirm2(msg, cb) {
+  if (window.confirm(msg)) cb();
+}
+
+// ===============================================
+// LOGIN
+// ===============================================
+function doLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const adminPass = get(KEYS.adminPass) || 'admin123';
+  if (user === 'admin' && pass === adminPass) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initApp();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+function doLogout() {
+  if (confirm('Yakin ingin keluar?')) {
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('loginError').style.display = 'none';
+  }
+}
+
+// ===============================================
+// NAVIGATION
+// ===============================================
+const pageTitles = { dashboard:'Dashboard', packages:'Kelola Paket', testimonials:'Kelola Testimoni', messages:'Pesan Masuk', hero:'Hero & Tagline', about:'Tentang Kami', settings:'Pengaturan' };
+function switchPage(page, el) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.querySelector(`#sec-${page}`).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  else { document.querySelectorAll('.nav-item').forEach(n => { if (n.textContent.includes(pageTitles[page]?.split(' ')[0])) n.classList.add('active'); }); }
+  document.getElementById('pageTitle').textContent = pageTitles[page] || page;
+  if (page === 'packages') renderPackagesTable();
+  if (page === 'testimonials') renderTestiTable();
+  if (page === 'messages') renderMsgTable('all');
+  if (page === 'hero') loadHeroForm();
+  if (page === 'about') loadAboutForm();
+  if (page === 'settings') loadSettingsForm();
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+// ===============================================
+// INIT APP
+// ===============================================
+function initApp() {
+  renderDashboard();
+  loadHeroForm();
+}
+
+function renderDashboard() {
+  // Stats
+  const pkgs = (get(KEYS.packages)||[]).filter(p=>p.active);
+  const testis = (get(KEYS.testis)||[]).filter(t=>t.active);
+  document.getElementById('stat-paket').textContent = pkgs.length;
+  document.getElementById('stat-testi').textContent = testis.length;
+
+  // Recent messages
+  const msgs = (get(KEYS.messages)||[]).slice(0,3);
+  const mc = document.getElementById('recentMsgContainer');
+  mc.innerHTML = msgs.map(m => `
+    <div class="order-item">
+      <div class="order-avatar">👤</div>
+      <div class="order-info">
+        <div class="order-name">${m.nama} ${!m.read ? '<span class="badge badge-featured" style="font-size:10px;">Baru</span>' : ''}</div>
+        <div class="order-detail">${m.acara} · ${m.hp}</div>
+        <div class="order-detail" style="margin-top:2px;">${m.pesan.slice(0,60)}...</div>
+      </div>
+    </div>`).join('');
+
+  // Activity
+  renderActivity();
+
+  // Package preview
+  const ppg = document.getElementById('pkgPreviewGrid');
+  ppg.innerHTML = (get(KEYS.packages)||[]).slice(0,5).map(p => `
+    <div class="preview-pkg">
+      <div class="preview-pkg-img" style="background:${p.color}">${p.emoji}</div>
+      <div class="preview-pkg-body">
+        <div class="preview-pkg-name">${p.name}</div>
+        <div class="preview-pkg-price">${formatRp(p.price)}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderActivity() {
+  const acts = get(KEYS.activity) || [];
+  document.getElementById('activityLog').innerHTML = acts.slice(0,6).map(a => `
+    <div class="activity-item">
+      <div class="activity-dot" style="background:${a.color}"></div>
+      <div><div class="activity-text">${a.text}</div><div class="activity-time">${a.time}</div></div>
+    </div>`).join('') || '<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:20px;">Belum ada aktivitas</div>';
+}
+
+// ===============================================
+// PACKAGES
+// ===============================================
+const EMOJIS = ['🍱','🍽️','🐑','🧁','🥘','🍲','🍛','🥗','🍗','🥩','🍜','🥞','🎂','🧆','🫕'];
+const COLORS = [
+  'linear-gradient(135deg,#f5a623,#f0761a)',
+  'linear-gradient(135deg,#e25d6a,#C8102E)',
+  'linear-gradient(135deg,#4CAF50,#2E7D32)',
+  'linear-gradient(135deg,#9c27b0,#673ab7)',
+  'linear-gradient(135deg,#00bcd4,#0097a7)',
+  'linear-gradient(135deg,#ff6b35,#c0392b)',
+  'linear-gradient(135deg,#2193b0,#6dd5ed)',
+  'linear-gradient(135deg,#f7971e,#ffd200)'
+];
+let selectedEmoji = '🍱', selectedColor = COLORS[0];
+
+function renderPackagesTable(filter='') {
+  let pkgs = get(KEYS.packages) || [];
+  if (filter) pkgs = pkgs.filter(p => p.name.toLowerCase().includes(filter.toLowerCase()) || p.category.toLowerCase().includes(filter.toLowerCase()));
+  document.getElementById('packagesTbody').innerHTML = pkgs.map(p => `
+    <tr>
+      <td class="drag-handle" title="Seret untuk atur urutan">⠿</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:40px;height:40px;border-radius:8px;background:${p.color};display:flex;align-items:center;justify-content:center;font-size:20px;">${p.emoji}</div>
+          <div><div style="font-weight:600;">${p.name}</div><div style="font-size:12px;color:var(--text-dim);">${p.desc.slice(0,50)}...</div></div>
+        </div>
+      </td>
+      <td style="font-weight:600;color:var(--red);">${formatRp(p.price)}</td>
+      <td>${p.category}</td>
+      <td><span class="badge ${p.active ? 'badge-active' : 'badge-inactive'}">${p.active ? '● Aktif' : '○ Nonaktif'}</span></td>
+      <td>${p.featured ? '<span class="badge badge-featured">⭐ Terlaris</span>' : '–'}</td>
+      <td>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-ghost btn-sm" onclick="editPackage(${p.id})">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deletePackage(${p.id})">🗑️</button>
+        </div>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-muted);">Belum ada paket</td></tr>';
+}
+
+function filterPackages(q) { renderPackagesTable(q); }
+
+function openPackageModal(pkg=null) {
+  document.getElementById('pkgEditId').value = pkg ? pkg.id : '';
+  document.getElementById('pkgModalTitle').textContent = pkg ? 'Edit Paket' : 'Tambah Paket';
+  document.getElementById('pkgName').value = pkg?.name || '';
+  document.getElementById('pkgPrice').value = pkg?.price || '';
+  document.getElementById('pkgPriceNote').value = pkg?.priceNote || '';
+  document.getElementById('pkgCategory').value = pkg?.category || 'Nasi Box';
+  document.getElementById('pkgDesc').value = pkg?.desc || '';
+  document.getElementById('pkgIncludes').value = pkg?.includes?.join('\n') || '';
+  document.getElementById('pkgActive').checked = pkg ? pkg.active : true;
+  document.getElementById('pkgFeatured').checked = pkg?.featured || false;
+  selectedEmoji = pkg?.emoji || '🍱';
+  selectedColor = pkg?.color || COLORS[0];
+  renderEmojiPicker();
+  renderColorPicker();
+  document.getElementById('pkgModal').classList.add('open');
+}
+
+function renderEmojiPicker() {
+  document.getElementById('emojiPicker').innerHTML = EMOJIS.map(e =>
+    `<div class="emoji-opt ${e===selectedEmoji?'selected':''}" onclick="selectEmoji('${e}')">${e}</div>`).join('');
+}
+function selectEmoji(e) { selectedEmoji = e; renderEmojiPicker(); }
+function renderColorPicker() {
+  document.getElementById('colorPicker').innerHTML = COLORS.map((c,i) =>
+    `<div class="color-opt ${c===selectedColor?'selected':''}" style="background:${c}" onclick="selectColor(${i})" title="Warna ${i+1}"></div>`).join('');
+}
+function selectColor(i) { selectedColor = COLORS[i]; renderColorPicker(); }
+
+function closePkgModal() { document.getElementById('pkgModal').classList.remove('open'); }
+
+function savePackage() {
+  const name = document.getElementById('pkgName').value.trim();
+  const price = parseInt(document.getElementById('pkgPrice').value);
+  if (!name || !price) { showToast('Nama dan harga wajib diisi!','error'); return; }
+  const pkgs = get(KEYS.packages) || [];
+  const editId = parseInt(document.getElementById('pkgEditId').value);
+  const obj = {
+    id: editId || Date.now(),
+    name, price,
+    priceNote: document.getElementById('pkgPriceNote').value,
+    category: document.getElementById('pkgCategory').value,
+    desc: document.getElementById('pkgDesc').value,
+    includes: document.getElementById('pkgIncludes').value.split('\n').filter(s=>s.trim()),
+    emoji: selectedEmoji, color: selectedColor,
+    active: document.getElementById('pkgActive').checked,
+    featured: document.getElementById('pkgFeatured').checked
+  };
+  if (editId) {
+    const idx = pkgs.findIndex(p=>p.id===editId);
+    pkgs[idx] = obj;
+  } else pkgs.push(obj);
+  set(KEYS.packages, pkgs);
+  closePkgModal();
+  renderPackagesTable();
+  renderDashboard();
+  logActivity(`Paket "${name}" ${editId ? 'diperbarui':'ditambahkan'}`, '#C8102E');
+  showToast(`Paket "${name}" berhasil disimpan!`);
+}
+
+function editPackage(id) {
+  const pkg = (get(KEYS.packages)||[]).find(p=>p.id===id);
+  if (pkg) openPackageModal(pkg);
+}
+
+function deletePackage(id) {
+  const pkgs = get(KEYS.packages)||[];
+  const pkg = pkgs.find(p=>p.id===id);
+  confirm2(`Hapus paket "${pkg?.name}"? Tindakan ini tidak bisa dibatalkan.`, () => {
+    set(KEYS.packages, pkgs.filter(p=>p.id!==id));
+    renderPackagesTable();
+    renderDashboard();
+    logActivity(`Paket "${pkg?.name}" dihapus`, '#ef4444');
+    showToast('Paket dihapus.', 'info');
+  });
+}
+
+// ===============================================
+// TESTIMONIALS
+// ===============================================
+function renderTestiTable() {
+  const testis = get(KEYS.testis) || [];
+  document.getElementById('testiTbody').innerHTML = testis.map(t => `
+    <tr>
+      <td><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:22px;">${t.avatar}</span><span style="font-weight:600;">${t.name}</span></div></td>
+      <td style="font-size:13px;color:var(--text-dim);">${t.role}</td>
+      <td style="color:#f59e0b;letter-spacing:1px;">${stars(t.rating)}</td>
+      <td style="font-size:13px;max-width:220px;">${t.text.slice(0,80)}...</td>
+      <td><span class="badge ${t.active ? 'badge-active':'badge-inactive'}">${t.active?'● Tayang':'○ Disembunyikan'}</span></td>
+      <td><div style="display:flex;gap:6px;">
+        <button class="btn btn-ghost btn-sm" onclick="editTesti(${t.id})">✏️</button>
+        <button class="btn btn-success btn-sm" onclick="toggleTesti(${t.id})">${t.active?'🙈':'👁️'}</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteTesti(${t.id})">🗑️</button>
+      </div></td>
+    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted);">Belum ada testimoni</td></tr>';
+}
+
+function openTestiModal(t=null) {
+  document.getElementById('testiEditId').value = t ? t.id : '';
+  document.getElementById('testiModalTitle').textContent = t ? 'Edit Testimoni' : 'Tambah Testimoni';
+  document.getElementById('testiName').value = t?.name || '';
+  document.getElementById('testiRole').value = t?.role || '';
+  document.getElementById('testiRating').value = t?.rating || 5;
+  document.getElementById('testiAvatar').value = t?.avatar || '👩';
+  document.getElementById('testiText').value = t?.text || '';
+  document.getElementById('testiActive').checked = t ? t.active : true;
+  document.getElementById('testiModal').classList.add('open');
+}
+function closeTestiModal() { document.getElementById('testiModal').classList.remove('open'); }
+
+function saveTestimoni() {
+  const name = document.getElementById('testiName').value.trim();
+  const text = document.getElementById('testiText').value.trim();
+  if (!name || !text) { showToast('Nama dan komentar wajib diisi!', 'error'); return; }
+  const testis = get(KEYS.testis) || [];
+  const editId = parseInt(document.getElementById('testiEditId').value);
+  const obj = {
+    id: editId || Date.now(), name,
+    role: document.getElementById('testiRole').value,
+    rating: parseInt(document.getElementById('testiRating').value),
+    avatar: document.getElementById('testiAvatar').value,
+    text, active: document.getElementById('testiActive').checked
+  };
+  if (editId) { const i = testis.findIndex(t=>t.id===editId); testis[i] = obj; }
+  else testis.push(obj);
+  set(KEYS.testis, testis);
+  closeTestiModal();
+  renderTestiTable();
+  renderDashboard();
+  logActivity(`Testimoni "${name}" ${editId?'diperbarui':'ditambahkan'}`, '#22c55e');
+  showToast(`Testimoni dari "${name}" disimpan!`);
+}
+function editTesti(id) { const t=(get(KEYS.testis)||[]).find(x=>x.id===id); if(t) openTestiModal(t); }
+function toggleTesti(id) {
+  const testis = get(KEYS.testis)||[];
+  const t = testis.find(x=>x.id===id);
+  t.active = !t.active;
+  set(KEYS.testis, testis);
+  renderTestiTable(); renderDashboard();
+  showToast(`Testimoni ${t.active?'ditayangkan':'disembunyikan'}.`, 'info');
+}
+function deleteTesti(id) {
+  const testis = get(KEYS.testis)||[];
+  const t = testis.find(x=>x.id===id);
+  confirm2(`Hapus testimoni dari "${t?.name}"?`, () => {
+    set(KEYS.testis, testis.filter(x=>x.id!==id));
+    renderTestiTable(); renderDashboard();
+    logActivity(`Testimoni dari "${t?.name}" dihapus`, '#ef4444');
+    showToast('Testimoni dihapus.', 'info');
+  });
+}
+
+// ===============================================
+// MESSAGES
+// ===============================================
+let msgFilter = 'all';
+function renderMsgTable(filter) {
+  msgFilter = filter;
+  let msgs = get(KEYS.messages) || [];
+  if (filter === 'unread') msgs = msgs.filter(m=>!m.read);
+  if (filter === 'read') msgs = msgs.filter(m=>m.read);
+  const unread = (get(KEYS.messages)||[]).filter(m=>!m.read).length;
+  document.getElementById('msgBadge').textContent = unread;
+  document.getElementById('msgBadge').style.display = unread > 0 ? 'inline' : 'none';
+  document.getElementById('msgTbody').innerHTML = msgs.map(m => `
+    <tr style="${!m.read?'font-weight:600;':''}">
+      <td><div style="display:flex;align-items:center;gap:8px;"><span>👤</span>${m.nama}</div></td>
+      <td><a href="https://wa.me/${m.hp.replace(/\D/g,'')}" target="_blank" style="color:#25D366;font-size:13px;">${m.hp}</a></td>
+      <td style="font-size:13px;">${m.acara}</td>
+      <td style="font-size:13px;max-width:200px;color:var(--text-dim);">${m.pesan.slice(0,60)}...</td>
+      <td style="font-size:12px;color:var(--text-muted);">${m.waktu}</td>
+      <td><span class="badge ${m.read?'badge-inactive':'badge-featured'}">${m.read?'Dibaca':'● Baru'}</span></td>
+      <td><div style="display:flex;gap:6px;">
+        <button class="btn btn-ghost btn-sm" onclick="viewMsg(${m.id})">👁️ Lihat</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteMsg(${m.id})">🗑️</button>
+      </div></td>
+    </tr>`).join('') || `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-muted);">Tidak ada pesan</td></tr>`;
+}
+
+function filterMsg(f, el) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderMsgTable(f);
+}
+
+function viewMsg(id) {
+  const msgs = get(KEYS.messages)||[];
+  const m = msgs.find(x=>x.id===id);
+  if (!m) return;
+  m.read = true;
+  set(KEYS.messages, msgs);
+  renderMsgTable(msgFilter);
+  document.getElementById('msgModalBody').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;">Nama</div><div style="font-weight:700;">${m.nama}</div></div>
+      <div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;">No. HP</div><div style="font-weight:700;color:#25D366;">${m.hp}</div></div>
+      <div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;">Jenis Acara</div><div style="font-weight:600;">${m.acara}</div></div>
+      <div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;">Waktu</div><div style="font-size:13px;color:var(--text-dim);">${m.waktu}</div></div>
+    </div>
+    <div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;margin-bottom:8px;">Pesan</div>
+    <div style="background:var(--surface2);border-radius:10px;padding:16px;font-size:14px;line-height:1.7;">${m.pesan}</div></div>`;
+  document.getElementById('msgModalFooter').innerHTML = `
+    <button class="btn btn-ghost" onclick="closeMsgModal()">Tutup</button>
+    <a href="https://wa.me/${m.hp.replace(/\D/g,'')}?text=${encodeURIComponent('Halo '+m.nama+', terima kasih sudah menghubungi Alif Catering. ')}" target="_blank">
+      <button class="btn btn-red" style="background:#25D366;">💬 Balas via WhatsApp</button>
+    </a>`;
+  document.getElementById('msgModal').classList.add('open');
+}
+function closeMsgModal() { document.getElementById('msgModal').classList.remove('open'); }
+function deleteMsg(id) {
+  const msgs = get(KEYS.messages)||[];
+  confirm2('Hapus pesan ini?', () => {
+    set(KEYS.messages, msgs.filter(m=>m.id!==id));
+    renderMsgTable(msgFilter);
+    showToast('Pesan dihapus.', 'info');
+  });
+}
+
+// ===============================================
+// HERO FORM
+// ===============================================
+function loadHeroForm() {
+  const h = get(KEYS.hero) || {};
+  document.getElementById('heroHeadline').value = h.headline || '';
+  document.getElementById('heroSub').value = h.sub || '';
+  document.getElementById('heroCta').value = h.cta || '';
+  document.getElementById('heroBadge').value = h.badge || '';
+  document.getElementById('heroPerks').value = h.perks || '';
+  document.getElementById('stat1num').value = h.stat1num || '';
+  document.getElementById('stat1lbl').value = h.stat1lbl || '';
+  document.getElementById('stat2num').value = h.stat2num || '';
+  document.getElementById('stat2lbl').value = h.stat2lbl || '';
+  updateHeroPreview();
+  ['heroHeadline','heroSub','heroBadge','heroPerks'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateHeroPreview);
+  });
+}
+function updateHeroPreview() {
+  document.getElementById('prevHeadline').textContent = document.getElementById('heroHeadline').value;
+  document.getElementById('prevSub').textContent = document.getElementById('heroSub').value;
+  document.getElementById('prevBadge').textContent = document.getElementById('heroBadge').value;
+  const perks = document.getElementById('heroPerks').value.split(',').filter(s=>s.trim());
+  document.getElementById('prevPerks').innerHTML = perks.map(p => `<div style="background:rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:12px;color:rgba(255,255,255,0.8);">✓ ${p.trim()}</div>`).join('');
+}
+function saveHero() {
+  set(KEYS.hero, {
+    headline: document.getElementById('heroHeadline').value,
+    sub: document.getElementById('heroSub').value,
+    cta: document.getElementById('heroCta').value,
+    badge: document.getElementById('heroBadge').value,
+    perks: document.getElementById('heroPerks').value,
+    stat1num: document.getElementById('stat1num').value,
+    stat1lbl: document.getElementById('stat1lbl').value,
+    stat2num: document.getElementById('stat2num').value,
+    stat2lbl: document.getElementById('stat2lbl').value
+  });
+  logActivity('Konten Hero & Tagline diperbarui', '#3b82f6');
+  showToast('Hero berhasil disimpan!');
+}
+
+// ===============================================
+// ABOUT FORM
+// ===============================================
+function loadAboutForm() {
+  const a = get(KEYS.about) || {};
+  document.getElementById('aboutName').value = a.name || '';
+  document.getElementById('aboutDesc').value = a.desc || '';
+  document.getElementById('aboutLong').value = a.long || '';
+  document.getElementById('aboutVisi').value = a.visi || '';
+  document.getElementById('aboutMisi').value = a.misi || '';
+  document.getElementById('aboutKomitmen').value = a.komitmen || '';
+  document.getElementById('aboutNilai').value = a.nilai || '';
+  document.getElementById('aboutStat').value = a.stat || '';
+  const ta = document.getElementById('aboutDesc');
+  const cc = document.getElementById('aboutDescCount');
+  ta.addEventListener('input', () => {
+    const len = ta.value.length;
+    cc.textContent = `${len} / 300 karakter`;
+    cc.className = 'char-count' + (len > 280 ? ' error' : len > 240 ? ' warn' : '');
+  });
+}
+function saveAbout() {
+  set(KEYS.about, {
+    name: document.getElementById('aboutName').value,
+    desc: document.getElementById('aboutDesc').value,
+    long: document.getElementById('aboutLong').value,
+    visi: document.getElementById('aboutVisi').value,
+    misi: document.getElementById('aboutMisi').value,
+    komitmen: document.getElementById('aboutKomitmen').value,
+    nilai: document.getElementById('aboutNilai').value,
+    stat: document.getElementById('aboutStat').value
+  });
+  logActivity('Halaman Tentang Kami diperbarui', '#22c55e');
+  showToast('Tentang Kami berhasil disimpan!');
+}
+
+// ===============================================
+// SETTINGS
+// ===============================================
+function loadSettingsForm() {
+  const s = get(KEYS.settings) || {};
+  document.getElementById('setWA').value = s.wa || '';
+  document.getElementById('setAlamat').value = s.alamat || '';
+  document.getElementById('setEmail').value = s.email || '';
+  document.getElementById('setJamWD').value = s.jamWD || '';
+  document.getElementById('setJamWE').value = s.jamWE || '';
+  document.getElementById('setMeta').value = s.meta || '';
+  document.getElementById('setCart').checked = s.showCart !== false;
+  document.getElementById('setWAFloat').checked = s.showWAFloat !== false;
+}
+function saveSettings() {
+  set(KEYS.settings, {
+    wa: document.getElementById('setWA').value,
+    alamat: document.getElementById('setAlamat').value,
+    email: document.getElementById('setEmail').value,
+    jamWD: document.getElementById('setJamWD').value,
+    jamWE: document.getElementById('setJamWE').value,
+    meta: document.getElementById('setMeta').value,
+    showCart: document.getElementById('setCart').checked,
+    showWAFloat: document.getElementById('setWAFloat').checked
+  });
+  logActivity('Pengaturan website diperbarui', '#f59e0b');
+  showToast('Pengaturan berhasil disimpan!');
+}
+function changePass() {
+  const old = document.getElementById('oldPass').value;
+  const nw = document.getElementById('newPass').value;
+  const curr = get(KEYS.adminPass) || 'admin123';
+  if (old !== curr) { showToast('Password lama salah!', 'error'); return; }
+  if (nw.length < 6) { showToast('Password baru minimal 6 karakter!', 'error'); return; }
+  set(KEYS.adminPass, nw);
+  document.getElementById('oldPass').value = '';
+  document.getElementById('newPass').value = '';
+  logActivity('Password admin diubah', '#3b82f6');
+  showToast('Password berhasil diubah!');
+}
+
+// Auto-init if we want to skip login (no)
+</script>
+</body>
+</html>

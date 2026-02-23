@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alif Catering | Catering Nasi Box, Prasmanan & Aqiqah Terpercaya</title>
+  <meta name="description" content="Alif Catering melayani nasi box, prasmanan, aqiqah dan catering harian dengan harga terjangkau dan rasa lezat. Pesan sekarang via WhatsApp!" />
+  <meta name="keywords" content="catering Madiun, nasi box Madiun, catering aqiqah Madiun, prasmanan Madiun, catering harian" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red: #C8102E;
+      --red-dark: #9E0C25;
+      --red-light: #F5E6E9;
+      --white: #FFFFFF;
+      --gray-50: #F9F9F9;
+      --gray-100: #F2F2F2;
+      --gray-200: #E5E5E5;
+      --gray-400: #9CA3AF;
+      --gray-600: #4B5563;
+      --gray-800: #1F2937;
+      --black: #111111;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+      --shadow-red: 0 8px 32px rgba(200,16,46,0.18);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--black); background: var(--white); overflow-x: hidden; }
+    img { max-width: 100%; display: block; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ======= ANIMATIONS ======= */
+    @keyframes fadeInUp { from { opacity:0; transform:translateY(32px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    @keyframes slideInLeft { from { opacity:0; transform:translateX(-32px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+    @keyframes pulse-red { 0%,100%{box-shadow:0 0 0 0 rgba(200,16,46,0.4);} 70%{box-shadow:0 0 0 12px rgba(200,16,46,0);} }
+    .animate-fadeInUp { animation: fadeInUp 0.7s ease both; }
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
+    .animate-delay-4 { animation-delay: 0.4s; }
+
+    /* ======= NAVBAR ======= */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 0 24px;
+      height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: box-shadow 0.3s;
+    }
+    nav.scrolled { box-shadow: var(--shadow-md); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo-icon {
+      width: 42px; height: 42px; background: var(--red); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; color: white; font-weight: 800; font-size: 20px;
+    }
+    .nav-logo-text { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--black); }
+    .nav-logo-text span { color: var(--red); }
+    .nav-links { display: flex; align-items: center; gap: 8px; }
+    .nav-links a { padding: 8px 14px; border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--gray-600); transition: all 0.2s; }
+    .nav-links a:hover { color: var(--red); background: var(--red-light); }
+    .nav-cart-btn {
+      position: relative; background: none; border: 1.5px solid var(--gray-200); border-radius: 10px;
+      padding: 8px 12px; cursor: pointer; font-size: 18px; transition: all 0.2s;
+    }
+    .nav-cart-btn:hover { border-color: var(--red); background: var(--red-light); }
+    .cart-badge {
+      position: absolute; top: -6px; right: -6px; background: var(--red); color: white;
+      border-radius: 50%; width: 18px; height: 18px; font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; border: 2px solid white;
+    }
+    .nav-order-btn {
+      background: var(--red); color: white; border: none; border-radius: 10px;
+      padding: 9px 18px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .nav-order-btn:hover { background: var(--red-dark); transform: translateY(-1px); box-shadow: var(--shadow-red); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; }
+    .hamburger span { width: 24px; height: 2px; background: var(--gray-800); border-radius: 2px; transition: 0.3s; }
+    .mobile-menu {
+      display: none; position: fixed; top: 68px; left: 0; right: 0; bottom: 0;
+      background: white; z-index: 999; flex-direction: column; padding: 24px;
+      border-top: 1px solid var(--gray-200); overflow-y: auto;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { padding: 14px 0; font-size: 16px; font-weight: 500; border-bottom: 1px solid var(--gray-100); color: var(--gray-800); }
+
+    /* ======= HERO ======= */
+    .hero {
+      min-height: 100vh; padding-top: 68px;
+      background: linear-gradient(135deg, #1a0008 0%, #2d0012 40%, #4a0a1e 100%);
+      position: relative; overflow: hidden;
+      display: flex; align-items: center;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-blob {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; pointer-events: none;
+    }
+    .hero-blob-1 { width: 500px; height: 500px; background: var(--red); top: -100px; right: -100px; }
+    .hero-blob-2 { width: 300px; height: 300px; background: #ff6b35; bottom: 50px; left: -50px; }
+    .hero-container { max-width: 1200px; margin: 0 auto; padding: 60px 24px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(200,16,46,0.2); border: 1px solid rgba(200,16,46,0.3);
+      color: #ff8fa3; border-radius: 50px; padding: 6px 16px; font-size: 13px; font-weight: 600;
+      margin-bottom: 20px; animation: fadeInUp 0.6s ease both;
+    }
+    .hero-badge::before { content: '✦'; font-size: 10px; }
+    .hero-title {
+      font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 58px); font-weight: 800;
+      color: white; line-height: 1.15; margin-bottom: 20px;
+      animation: fadeInUp 0.7s ease both 0.1s;
+    }
+    .hero-title span { color: #FF6B6B; }
+    .hero-sub {
+      font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 32px;
+      animation: fadeInUp 0.7s ease both 0.2s;
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeInUp 0.7s ease both 0.3s; }
+    .btn-primary {
+      background: var(--red); color: white; border: none; border-radius: 12px;
+      padding: 14px 28px; font-size: 15px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; gap: 8px; transition: all 0.3s;
+      animation: pulse-red 2.5s infinite 1s;
+    }
+    .btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(200,16,46,0.4); }
+    .btn-outline {
+      background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 12px; padding: 14px 28px; font-size: 15px; font-weight: 600; cursor: pointer;
+      transition: all 0.3s;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.6); }
+    .hero-perks { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 36px; animation: fadeInUp 0.7s ease both 0.4s; }
+    .hero-perk {
+      display: flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(255,255,255,0.75);
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px; padding: 6px 12px;
+    }
+    .hero-perk span { color: #4ade80; font-size: 14px; }
+    .hero-visual { position: relative; z-index: 2; animation: fadeIn 1s ease both 0.3s; }
+    .hero-food-card {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px; overflow: hidden; backdrop-filter: blur(10px);
+    }
+    .hero-food-img {
+      width: 100%; height: 320px; object-fit: cover;
+      background: linear-gradient(135deg, #8B1A2B 0%, #C8102E 50%, #E85D74 100%);
+      display: flex; align-items: center; justify-content: center; font-size: 80px;
+    }
+    .hero-food-info { padding: 20px; }
+    .hero-food-info h3 { font-family: 'Playfair Display', serif; font-size: 20px; color: white; margin-bottom: 6px; }
+    .hero-food-info p { font-size: 14px; color: rgba(255,255,255,0.6); }
+    .hero-stats {
+      display: flex; gap: 16px; margin-top: 16px;
+    }
+    .hero-stat { flex: 1; background: rgba(255,255,255,0.06); border-radius: 12px; padding: 14px; text-align: center; }
+    .hero-stat .num { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: white; }
+    .hero-stat .lbl { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+    /* ======= SECTIONS ======= */
+    section { padding: 80px 24px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-label { font-size: 13px; font-weight: 700; color: var(--red); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(26px, 4vw, 44px); font-weight: 700; color: var(--black); margin-bottom: 16px; line-height: 1.2; }
+    .section-sub { font-size: 16px; color: var(--gray-600); line-height: 1.7; max-width: 540px; }
+    .section-header { margin-bottom: 48px; }
+    .section-header.center { text-align: center; }
+    .section-header.center .section-sub { margin: 0 auto; }
+
+    /* ======= KEUNGGULAN ======= */
+    .features-bg { background: var(--gray-50); }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+    .feature-card {
+      background: white; border-radius: 20px; padding: 28px; box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200); transition: all 0.3s; text-align: center;
+    }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--red-light); }
+    .feature-icon { width: 60px; height: 60px; background: var(--red-light); border-radius: 16px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+    .feature-card h3 { font-weight: 700; font-size: 16px; margin-bottom: 8px; color: var(--black); }
+    .feature-card p { font-size: 14px; color: var(--gray-600); line-height: 1.6; }
+
+    /* ======= PACKAGES ======= */
+    .packages-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; }
+    .package-card {
+      background: white; border-radius: 24px; overflow: hidden;
+      box-shadow: var(--shadow-md); border: 1px solid var(--gray-100);
+      transition: all 0.3s; position: relative;
+    }
+    .package-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+    .package-card.featured { border: 2px solid var(--red); }
+    .package-badge {
+      position: absolute; top: 16px; right: 16px; z-index: 2;
+      background: var(--red); color: white; font-size: 11px; font-weight: 700;
+      padding: 4px 12px; border-radius: 50px; letter-spacing: 0.5px;
+    }
+    .package-img {
+      width: 100%; height: 200px; object-fit: cover;
+      display: flex; align-items: center; justify-content: center; font-size: 64px;
+    }
+    .pkg-img-nasbox { background: linear-gradient(135deg, #f5a623, #f0761a); }
+    .pkg-img-prasmanan { background: linear-gradient(135deg, #e25d6a, #C8102E); }
+    .pkg-img-aqiqah { background: linear-gradient(135deg, #4CAF50, #2E7D32); }
+    .pkg-img-snack { background: linear-gradient(135deg, #9c27b0, #673ab7); }
+    .pkg-img-harian { background: linear-gradient(135deg, #00bcd4, #0097a7); }
+    .package-body { padding: 24px; }
+    .package-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .package-desc { font-size: 14px; color: var(--gray-600); line-height: 1.6; margin-bottom: 16px; }
+    .package-includes { margin-bottom: 16px; }
+    .package-includes li { font-size: 13px; color: var(--gray-600); padding: 3px 0; display: flex; align-items: center; gap: 6px; list-style: none; }
+    .package-includes li::before { content: '✓'; color: var(--red); font-weight: 700; }
+    .package-price { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--red); margin-bottom: 6px; }
+    .package-price-note { font-size: 12px; color: var(--gray-400); margin-bottom: 20px; }
+    .package-btns { display: flex; gap: 10px; }
+    .btn-cart {
+      flex: 1; background: var(--gray-100); color: var(--gray-800); border: none;
+      border-radius: 10px; padding: 11px; font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-cart:hover { background: var(--red-light); color: var(--red); }
+    .btn-wa {
+      flex: 1; background: #25D366; color: white; border: none;
+      border-radius: 10px; padding: 11px; font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-wa:hover { background: #1ebe5b; transform: translateY(-1px); }
+
+    /* ======= CART PANEL ======= */
+    .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1100; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+    .cart-panel {
+      position: fixed; top: 0; right: -420px; bottom: 0; width: 420px; max-width: 100vw;
+      background: white; z-index: 1101; padding: 24px; overflow-y: auto;
+      box-shadow: -8px 0 40px rgba(0,0,0,0.15); transition: right 0.35s ease;
+      display: flex; flex-direction: column;
+    }
+    .cart-panel.open { right: 0; }
+    .cart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--gray-100); }
+    .cart-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; }
+    .cart-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--gray-600); padding: 4px 8px; border-radius: 8px; transition: 0.2s; }
+    .cart-close:hover { background: var(--gray-100); }
+    .cart-items { flex: 1; }
+    .cart-empty { text-align: center; padding: 60px 20px; color: var(--gray-400); }
+    .cart-empty .icon { font-size: 48px; margin-bottom: 12px; }
+    .cart-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--gray-100); }
+    .cart-item-icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .cart-item-name { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+    .cart-item-price { font-size: 13px; color: var(--red); font-weight: 600; }
+    .cart-item-info { flex: 1; }
+    .qty-control { display: flex; align-items: center; gap: 6px; }
+    .qty-btn { width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid var(--gray-200); background: white; cursor: pointer; font-size: 16px; font-weight: 600; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+    .qty-btn:hover { border-color: var(--red); color: var(--red); }
+    .qty-num { font-weight: 700; min-width: 24px; text-align: center; }
+    .qty-remove { background: none; border: none; color: var(--gray-400); cursor: pointer; font-size: 16px; padding: 4px; transition: 0.2s; }
+    .qty-remove:hover { color: var(--red); }
+    .cart-footer { padding-top: 20px; border-top: 1px solid var(--gray-100); }
+    .cart-total { display: flex; justify-content: space-between; font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .cart-total span:last-child { color: var(--red); }
+    .btn-checkout { width: 100%; background: #25D366; color: white; border: none; border-radius: 12px; padding: 16px; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+    .btn-checkout:hover { background: #1ebe5b; }
+
+    /* ======= TESTIMONIALS ======= */
+    .testi-bg { background: var(--gray-50); }
+    .testi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+    .testi-card {
+      background: white; border-radius: 20px; padding: 28px; box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200); transition: all 0.3s;
+    }
+    .testi-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .testi-stars { color: #f59e0b; font-size: 16px; margin-bottom: 14px; }
+    .testi-text { font-size: 14px; line-height: 1.7; color: var(--gray-600); margin-bottom: 18px; font-style: italic; }
+    .testi-author { display: flex; align-items: center; gap: 10px; }
+    .testi-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--red-light); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .testi-name { font-weight: 700; font-size: 14px; }
+    .testi-role { font-size: 12px; color: var(--gray-400); }
+
+    /* ======= ABOUT ======= */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .about-img-container { position: relative; }
+    .about-main-img {
+      width: 100%; height: 400px; border-radius: 24px; overflow: hidden;
+      background: linear-gradient(135deg, #8B1A2B 0%, #C8102E 60%, #E85D74 100%);
+      display: flex; align-items: center; justify-content: center; font-size: 100px;
+    }
+    .about-float-card {
+      position: absolute; bottom: -20px; right: -20px;
+      background: white; border-radius: 16px; padding: 16px 20px; box-shadow: var(--shadow-lg);
+      border: 1px solid var(--gray-100);
+    }
+    .about-float-card .num { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 800; color: var(--red); }
+    .about-float-card .lbl { font-size: 13px; color: var(--gray-600); }
+    .about-content .section-sub { max-width: 100%; margin-bottom: 24px; }
+    .about-values { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .about-value { background: var(--gray-50); border-radius: 14px; padding: 16px; }
+    .about-value h4 { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+    .about-value p { font-size: 13px; color: var(--gray-600); line-height: 1.5; }
+
+    /* ======= CONTACT ======= */
+    .contact-bg { background: var(--gray-50); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .contact-info-card { background: var(--red); border-radius: 24px; padding: 40px; color: white; }
+    .contact-info-card h2 { font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 8px; }
+    .contact-info-card p { opacity: 0.85; line-height: 1.7; margin-bottom: 32px; font-size: 14px; }
+    .contact-detail { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
+    .contact-detail-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .contact-detail-text strong { display: block; font-size: 13px; opacity: 0.7; margin-bottom: 2px; }
+    .contact-detail-text span { font-size: 14px; font-weight: 600; }
+    .contact-hours { background: rgba(255,255,255,0.1); border-radius: 14px; padding: 16px; margin-top: 28px; }
+    .contact-hours h4 { font-size: 13px; opacity: 0.7; margin-bottom: 10px; }
+    .contact-hours p { font-size: 14px; font-weight: 600; line-height: 1.8; }
+    .contact-form-card { background: white; border-radius: 24px; padding: 40px; box-shadow: var(--shadow-md); }
+    .contact-form-card h3 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 24px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-600); margin-bottom: 6px; }
+    .form-group input, .form-group textarea {
+      width: 100%; border: 1.5px solid var(--gray-200); border-radius: 10px;
+      padding: 12px 14px; font-size: 14px; font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: border-color 0.2s; outline: none; background: var(--gray-50);
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--red); background: white; }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .btn-submit {
+      width: 100%; background: var(--red); color: white; border: none; border-radius: 12px;
+      padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.3s;
+    }
+    .btn-submit:hover { background: var(--red-dark); transform: translateY(-1px); box-shadow: var(--shadow-red); }
+    .map-container { margin-top: 32px; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); }
+    .map-container iframe { width: 100%; height: 260px; border: none; display: block; }
+
+    /* ======= FOOTER ======= */
+    footer { background: var(--black); color: rgba(255,255,255,0.7); }
+    .footer-main { max-width: 1200px; margin: 0 auto; padding: 60px 24px 40px; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; }
+    .footer-brand .nav-logo { margin-bottom: 16px; }
+    .footer-brand p { font-size: 14px; line-height: 1.7; max-width: 280px; }
+    .footer-socials { display: flex; gap: 10px; margin-top: 20px; }
+    .social-btn { width: 36px; height: 36px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: 0.2s; }
+    .social-btn:hover { background: var(--red); }
+    .footer-col h4 { color: white; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+    .footer-col a { display: block; font-size: 13px; padding: 4px 0; transition: 0.2s; }
+    .footer-col a:hover { color: white; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); max-width: 1200px; margin: 0 auto; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+
+    /* ======= WA FLOATING ======= */
+    .wa-float {
+      position: fixed; bottom: 28px; right: 28px; z-index: 1000;
+      background: #25D366; color: white; border-radius: 50px;
+      padding: 14px 20px; display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 32px rgba(37,211,102,0.4); cursor: pointer; transition: all 0.3s;
+      font-weight: 700; font-size: 14px; text-decoration: none;
+    }
+    .wa-float:hover { background: #1ebe5b; transform: translateY(-4px); box-shadow: 0 16px 48px rgba(37,211,102,0.5); }
+    .wa-float svg { width: 22px; height: 22px; fill: white; }
+    .wa-label { white-space: nowrap; }
+
+    /* ======= TOAST ======= */
+    .toast {
+      position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--black); color: white; padding: 12px 24px; border-radius: 50px;
+      font-size: 14px; font-weight: 600; z-index: 2000; opacity: 0; pointer-events: none;
+      transition: all 0.3s; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ======= SCROLL REVEAL ======= */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s cubic-bezier(0.22,1,0.36,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ======= RESPONSIVE ======= */
+    @media (max-width: 900px) {
+      .hero-container { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-img-container { max-width: 500px; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .footer-main { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .nav-order-btn { display: none; }
+      .hamburger { display: flex; }
+      .packages-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .about-values { grid-template-columns: 1fr; }
+      .footer-main { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+      .wa-float .wa-label { display: none; }
+      .wa-float { border-radius: 50%; padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-logo">
+    <div class="nav-logo-icon">A</div>
+    <div class="nav-logo-text">Alif <span>Catering</span></div>
+  </div>
+  <div class="nav-links">
+    <a href="#beranda">Beranda</a>
+    <a href="#paket">Paket</a>
+    <a href="#tentang">Tentang</a>
+    <a href="#kontak">Kontak</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="nav-cart-btn" onclick="toggleCart()" aria-label="Keranjang">
+      🛒
+      <span class="cart-badge" id="cartBadge" style="display:none">0</span>
+    </button>
+    <button class="nav-order-btn" onclick="orderWA()">Pesan Sekarang</button>
+    <div class="hamburger" onclick="toggleMobile()" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#beranda" onclick="closeMobile()">🏠 Beranda</a>
+  <a href="#paket" onclick="closeMobile()">🍱 Paket & Menu</a>
+  <a href="#tentang" onclick="closeMobile()">ℹ️ Tentang Kami</a>
+  <a href="#kontak" onclick="closeMobile()">📞 Kontak</a>
+  <a href="https://wa.me/6285871328301" target="_blank" style="color:#25D366;font-weight:700;border:none;margin-top:12px;">
+    💬 Chat WhatsApp
+  </a>
+</div>
+
+<!-- HERO -->
+<section id="beranda" class="hero">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="hero-badge">🍽️ Catering Halal & Terpercaya Madiun</div>
+      <h1 class="hero-title">Hidangan Lezat<br>untuk Setiap<br><span>Momen Spesial</span></h1>
+      <p class="hero-sub">Melayani Catering Harian, Aqiqah, Prasmanan & Event dengan rasa autentik, bahan segar, dan harga yang bersahabat.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="orderWA()">
+          <svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Pesan Sekarang
+        </button>
+        <a href="#paket"><button class="btn-outline">Lihat Menu →</button></a>
+      </div>
+      <div class="hero-perks">
+        <div class="hero-perk"><span>✓</span> Bahan Fresh & Halal</div>
+        <div class="hero-perk"><span>✓</span> Harga Terjangkau</div>
+        <div class="hero-perk"><span>✓</span> Bisa Request Menu</div>
+        <div class="hero-perk"><span>✓</span> Tepat Waktu & Higienis</div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-food-card">
+        <div class="hero-food-img" role="img" aria-label="Hidangan Alif Catering">🍱</div>
+        <div class="hero-food-info">
+          <h3>Paket Nasi Box Premium</h3>
+          <p>Nasi putih + lauk pilihan + sayur + kerupuk</p>
+        </div>
+        <div class="hero-stats" style="padding:0 20px 20px;">
+          <div class="hero-stat"><div class="num">500+</div><div class="lbl">Pelanggan Puas</div></div>
+          <div class="hero-stat"><div class="num">5★</div><div class="lbl">Rating Rata-rata</div></div>
+          <div class="hero-stat"><div class="num">3 Thn</div><div class="lbl">Berpengalaman</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEUNGGULAN -->
+<section class="features-bg" style="padding:80px 24px;">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="section-label">Kenapa Pilih Kami</div>
+      <h2 class="section-title">Rasa Terbaik,<br>Harga Bersahabat</h2>
+      <p class="section-sub">Kami berkomitmen menghadirkan pengalaman kuliner terbaik untuk setiap momen berharga Anda dan keluarga.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">🥩</div>
+        <h3>Bahan Fresh & Halal</h3>
+        <p>Semua bahan dipilih segar setiap hari dengan sertifikasi halal terjamin untuk ketenangan hati Anda.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">💰</div>
+        <h3>Harga Terjangkau</h3>
+        <p>Paket mulai dari harga yang sangat terjangkau tanpa mengorbankan kualitas rasa dan kebersihan.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📋</div>
+        <h3>Custom Menu</h3>
+        <p>Anda bisa request menu sesuai selera dan kebutuhan acara. Kami siap mewujudkan impian kuliner Anda.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">⏰</div>
+        <h3>Tepat Waktu</h3>
+        <p>Kami berkomitmen pengiriman selalu tepat waktu sehingga acara Anda berjalan lancar dan menyenangkan.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🧼</div>
+        <h3>Standar Higienis</h3>
+        <p>Dapur produksi kami menjaga standar kebersihan ketat sehingga makanan aman dan sehat untuk dikonsumsi.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🚚</div>
+        <h3>Antar ke Lokasi</h3>
+        <p>Layanan pengantaran langsung ke lokasi acara Anda di wilayah Madiun dan sekitarnya tanpa biaya tambahan.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAKET & MENU -->
+<section id="paket" style="padding:80px 24px; background:white;">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Paket & Menu</div>
+      <h2 class="section-title">Pilihan Paket<br>Terlengkap & Terjangkau</h2>
+      <p class="section-sub">Dari acara kecil hingga besar, kami memiliki paket yang tepat untuk Anda. Pesan mudah, antar tepat waktu.</p>
+    </div>
+    <div class="packages-grid" id="packagesGrid">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONI -->
+<section class="testi-bg" style="padding:80px 24px;">
+  <div class="container">
+    <div class="section-header center reveal">
+      <div class="section-label">Testimoni</div>
+      <h2 class="section-title">Kata Pelanggan Kami</h2>
+      <p class="section-sub">Kepuasan pelanggan adalah prioritas utama kami. Inilah cerita nyata dari mereka yang telah mempercayai Alif Catering.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Makanannya enak banget! Saya pesan untuk acara ulang tahun anak, tamunya pada senang. Porsinya juga besar, tidak mengecewakan. Pasti pesan lagi!"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👩</div>
+          <div><div class="testi-name">Bu Siti Rahayu</div><div class="testi-role">Acara Ulang Tahun – Madiun</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Sudah 3 kali pesan paket aqiqah di sini. Selalu puas! Pelayanannya ramah, pengiriman tepat waktu, dan yang penting harganya sangat reasonable."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👨</div>
+          <div><div class="testi-name">Pak Budi Santoso</div><div class="testi-role">Acara Aqiqah – Madiun</div></div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Recomended banget untuk catering harian kantor kami. Variasinya banyak, rasanya tidak membosankan. Tim Alif Catering sangat profesional dan responsif."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">👩</div>
+          <div><div class="testi-name">Ibu Dewi Kartika</div><div class="testi-role">Catering Harian – Kantor</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TENTANG KAMI -->
+<section id="tentang" style="padding:80px 24px; background:white;">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-container reveal">
+        <div class="about-main-img" role="img" aria-label="Dapur Produksi Alif Catering">👨‍🍳</div>
+        <div class="about-float-card">
+          <div class="num">500+</div>
+          <div class="lbl">Acara Sukses Terlayani</div>
+        </div>
+      </div>
+      <div class="about-content reveal">
+        <div class="section-label">Tentang Kami</div>
+        <h2 class="section-title">Catering Halal &<br>Terpercaya untuk<br>Keluarga Anda</h2>
+        <p class="section-sub">Alif Catering berdiri sejak 2021 di Madiun, Jawa Timur. Kami hadir dengan misi menghadirkan hidangan berkualitas dengan harga terjangkau untuk setiap momen spesial keluarga Indonesia.</p>
+        <p style="font-size:14px;color:var(--gray-600);line-height:1.7;margin-bottom:28px;">Diprakarsai oleh tim berpengalaman yang berdedikasi, kami telah melayani ratusan acara mulai dari prasmanan pernikahan, aqiqah, arisan, rapat kantor, hingga catering harian dengan standar kualitas dan kebersihan yang konsisten.</p>
+        <div class="about-values">
+          <div class="about-value">
+            <h4>🎯 Visi</h4>
+            <p>Menjadi catering pilihan utama di Madiun yang terpercaya, halal, dan berkualitas.</p>
+          </div>
+          <div class="about-value">
+            <h4>💡 Misi</h4>
+            <p>Menghadirkan hidangan lezat dengan bahan segar, harga bersahabat, dan pelayanan tulus.</p>
+          </div>
+          <div class="about-value">
+            <h4>🏆 Komitmen</h4>
+            <p>Setiap pesanan dikerjakan dengan penuh tanggung jawab dan standar higienis ketat.</p>
+          </div>
+          <div class="about-value">
+            <h4>❤️ Nilai</h4>
+            <p>Kepuasan pelanggan adalah kebanggaan kami. Setiap gigitan adalah karya hati kami.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAK -->
+<section id="kontak" class="contact-bg" style="padding:80px 24px;">
+  <div class="container">
+    <div class="section-header center reveal" style="margin-bottom:48px;">
+      <div class="section-label">Hubungi Kami</div>
+      <h2 class="section-title">Siap Melayani Pesanan Anda</h2>
+      <p class="section-sub">Konsultasikan kebutuhan catering Anda bersama kami. Kami siap memberikan penawaran terbaik!</p>
+    </div>
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="contact-info-card">
+          <h2>Alif Catering</h2>
+          <p>Catering Halal & Terpercaya – Madiun, Jawa Timur</p>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📱</div>
+            <div class="contact-detail-text">
+              <strong>WhatsApp / Telepon</strong>
+              <span>+62 812-3456-7890</span>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📍</div>
+            <div class="contact-detail-text">
+              <strong>Alamat</strong>
+              <span>Jl. Raya Madiun No. 123, Madiun,<br>Jawa Timur 63211</span>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📧</div>
+            <div class="contact-detail-text">
+              <strong>Email</strong>
+              <span>alifcatering@gmail.com</span>
+            </div>
+          </div>
+          <div class="contact-hours">
+            <h4>⏰ JAM OPERASIONAL</h4>
+            <p>Senin – Sabtu: 07.00 – 21.00 WIB<br>Minggu & Hari Libur: 08.00 – 18.00 WIB</p>
+          </div>
+        </div>
+        <div class="map-container" style="margin-top:24px;">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3954.9370117898466!2d111.6149809745061!3d-7.581835674903439!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e79b976af5db57b%3A0x156707ab2bb15048!2sAlif%20Catering!5e0!3m2!1sid!2sid!4v1771827461618!5m2!1sid!2sid"
+            width="100%" height="260" style="border:0;" allowfullscreen="" loading="lazy"
+            title="Lokasi Alif Catering " aria-label="Peta lokasi Alif Catering di Madiun">
+          </iframe>
+        </div>
+      </div>
+      <div class="contact-form-card reveal">
+        <h3>Kirim Pesan</h3>
+        <div class="form-group">
+          <label for="nama">Nama Lengkap</label>
+          <input type="text" id="nama" placeholder="Masukkan nama Anda" />
+        </div>
+        <div class="form-group">
+          <label for="telp">Nomor HP / WhatsApp</label>
+          <input type="tel" id="telp" placeholder="08xx-xxxx-xxxx" />
+        </div>
+        <div class="form-group">
+          <label for="acara">Jenis Acara</label>
+          <input type="text" id="acara" placeholder="Contoh: Prasmanan, Nasi Box, Aqiqah..." />
+        </div>
+        <div class="form-group">
+          <label for="pesan">Pesan / Kebutuhan</label>
+          <textarea id="pesan" placeholder="Ceritakan kebutuhan catering Anda..."></textarea>
+        </div>
+        <button class="btn-submit" onclick="submitForm()">Kirim via WhatsApp 💬</button>
+        <p style="font-size:12px;color:var(--gray-400);text-align:center;margin-top:12px;">Pesan akan dikirim langsung ke WhatsApp kami dan dibalas dalam 15 menit</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand">
+    <div class="nav-logo">
+    <div class="nav-logo-icon">
+        <img src="https://drive.google.com/file/d/1j2h7V9gqzNZ9bCv-kEpRV5eZS4TKjYx9/view?usp=sharing" 
+            alt="Logo Alif Catering" 
+            style="height:40px; width:auto;">
+    </div>
+    <div class="nav-logo-text" style="color:white;">
+        Alif <span>Catering</span>
+    </div>
+    </div>
+      <p>Catering halal & terpercaya untuk setiap momen spesial Anda. Rasa terbaik, harga bersahabat, antar tepat waktu.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-btn" aria-label="Instagram">📸</a>
+        <a href="#" class="social-btn" aria-label="Facebook">📘</a>
+        <a href="https://wa.me/6285871328301" class="social-btn" aria-label="WhatsApp">💬</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigasi</h4>
+      <a href="#beranda">Beranda</a>
+      <a href="#paket">Paket & Menu</a>
+      <a href="#tentang">Tentang Kami</a>
+      <a href="#kontak">Kontak</a>
+    </div>
+    <div class="footer-col">
+      <h4>Layanan</h4>
+      <a href="#paket">Nasi Box</a>
+      <a href="#paket">Prasmanan</a>
+      <a href="#paket">Paket Aqiqah</a>
+      <a href="#paket">Snack Box</a>
+      <a href="#paket">Catering Harian</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Alif Catering. All rights reserved.</span>
+    <span>Made with ❤️ in Madiun, Jawa Timur</span>
+  </div>
+</footer>
+
+<!-- WA FLOATING -->
+<a href="https://wa.me/6285871328301?text=Halo%20Alif%20Catering%2C%20saya%20ingin%20memesan%20catering" target="_blank" class="wa-float" aria-label="Chat WhatsApp Alif Catering">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="wa-label">Chat WhatsApp</span>
+</a>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h2>🛒 Keranjang Pesanan</h2>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <div class="icon">🛒</div>
+      <p>Keranjang masih kosong</p>
+      <p style="font-size:13px;margin-top:6px;color:var(--gray-400)">Tambahkan paket favorit Anda</p>
+    </div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none;">
+    <div class="cart-total">
+      <span>Total</span>
+      <span id="cartTotal">Rp 0</span>
+    </div>
+    <button class="btn-checkout" onclick="checkout()">
+      <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Checkout via WhatsApp
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ======= CMS DATA LOADER =======
+  const CMS = {
+    get: (k) => { try { return JSON.parse(localStorage.getItem(k)); } catch(e) { return null; } },
+    set: (k,v) => localStorage.setItem(k, JSON.stringify(v))
+  };
+
+  // Default data fallback
+  const DEFAULT_PACKAGES = [
+    { id:1, name:'Paket Nasi Box', emoji:'🍱', color:'linear-gradient(135deg,#f5a623,#f0761a)', desc:'Nasi box lengkap dengan lauk pilihan, sayur, kerupuk, dan buah.', includes:['Nasi putih / nasi uduk','Lauk pilihan (ayam/daging/ikan)','Sayur tumis','Kerupuk & sambal','Buah / dessert'], price:20000, priceNote:'mulai dari Rp 20.000 / pcs (min. 25 pcs)', active:true, featured:false },
+    { id:2, name:'Paket Prasmanan', emoji:'🍽️', color:'linear-gradient(135deg,#e25d6a,#C8102E)', desc:'Paket prasmanan lengkap untuk acara pernikahan, khitanan, dan hajatan.', includes:['5–7 menu lauk pauk','Nasi putih dan nasi gurih','Sup / soto pilihan','Minuman es & panas','Setup meja & peralatan'], price:45000, priceNote:'mulai Rp 45.000 / orang (min. 50 orang)', active:true, featured:true },
+    { id:3, name:'Paket Aqiqah', emoji:'🐑', color:'linear-gradient(135deg,#4CAF50,#2E7D32)', desc:'Paket aqiqah lengkap dengan kambing guling yang lezat.', includes:['Kambing guling / sate / gulai','Nasi putih / nasi kebuli','Sayur + pelengkap','Kerupuk & acar','Bungkus dus atau prasmanan'], price:850000, priceNote:'mulai Rp 850.000 / ekor kambing', active:true, featured:false },
+    { id:4, name:'Paket Snack Box', emoji:'🧁', color:'linear-gradient(135deg,#9c27b0,#673ab7)', desc:'Snack box untuk coffee break, seminar, dan gathering kantor.', includes:['3–5 jenis kue/snack','Minuman kotak / air mineral','Packaging rapi & higienis','Bisa request jenis snack','Tersedia kue tradisional'], price:12000, priceNote:'mulai Rp 12.000 / pcs (min. 50 pcs)', active:true, featured:false },
+    { id:5, name:'Catering Harian', emoji:'🥘', color:'linear-gradient(135deg,#00bcd4,#0097a7)', desc:'Layanan catering harian untuk karyawan, kost, atau keluarga.', includes:['Menu berganti setiap hari','Nasi + 2 lauk + sayur','Pengiriman pagi & siang','Harga spesial langganan','Bisa request diet khusus'], price:15000, priceNote:'mulai Rp 15.000 / porsi (berlangganan)', active:true, featured:false }
+  ];
+  const DEFAULT_TESTIS = [
+    { id:1, name:'Bu Siti Rahayu', role:'Acara Ulang Tahun – Madiun', rating:5, text:'Makanannya enak banget! Saya pesan untuk acara ulang tahun anak, tamunya pada senang. Porsinya juga besar, tidak mengecewakan. Pasti pesan lagi!', avatar:'👩', active:true },
+    { id:2, name:'Pak Budi Santoso', role:'Acara Aqiqah – Madiun', rating:5, text:'Sudah 3 kali pesan paket aqiqah di sini. Selalu puas! Pelayanannya ramah, pengiriman tepat waktu, dan yang penting harganya sangat reasonable.', avatar:'👨', active:true },
+    { id:3, name:'Ibu Dewi Kartika', role:'Catering Harian – Kantor', rating:5, text:'Recomended banget untuk catering harian kantor kami. Variasinya banyak, rasanya tidak membosankan. Tim Alif Catering sangat profesional dan responsif.', avatar:'👩', active:true }
+  ];
+  const DEFAULT_HERO = { headline:'Hidangan Lezat untuk Setiap Momen Spesial', sub:'Melayani Catering Harian, Aqiqah, Prasmanan & Event', cta:'Pesan Sekarang', badge:'🍽️ Catering Halal & Terpercaya Madiun', perks:'Bahan Fresh & Halal,Harga Terjangkau,Bisa Request Menu,Tepat Waktu & Higienis', stat1num:'500+', stat1lbl:'Pelanggan Puas', stat2num:'5★', stat2lbl:'Rating Rata-rata' };
+  const DEFAULT_ABOUT = { name:'Alif Catering', desc:'Catering halal & terpercaya untuk setiap momen spesial Anda.', long:'Alif Catering berdiri sejak 2021 di Madiun, Jawa Timur. Kami hadir dengan misi menghadirkan hidangan berkualitas dengan harga terjangkau untuk setiap momen spesial keluarga Indonesia.', visi:'Menjadi catering pilihan utama di Madiun yang terpercaya, halal, dan berkualitas.', misi:'Menghadirkan hidangan lezat dengan bahan segar, harga bersahabat, dan pelayanan tulus.', komitmen:'Setiap pesanan dikerjakan dengan penuh tanggung jawab dan standar higienis ketat.', nilai:'Kepuasan pelanggan adalah kebanggaan kami. Setiap gigitan adalah karya hati kami.', stat:'500+' };
+  const DEFAULT_SETTINGS = { wa:'+62 812-3456-7890', alamat:'Jl. Raya Madiun No. 123, Madiun, Jawa Timur 63211', email:'alifcatering@gmail.com', jamWD:'07.00 – 21.00 WIB', jamWE:'08.00 – 18.00 WIB', showCart:true, showWAFloat:true };
+
+  // Load CMS data (fallback to defaults if admin hasn't set up yet)
+  const packages = (CMS.get('ac_packages') || DEFAULT_PACKAGES).filter(p => p.active !== false);
+  const testis = (CMS.get('ac_testis') || DEFAULT_TESTIS).filter(t => t.active !== false);
+  const hero = CMS.get('ac_hero') || DEFAULT_HERO;
+  const about = CMS.get('ac_about') || DEFAULT_ABOUT;
+  const settings = CMS.get('ac_settings') || DEFAULT_SETTINGS;
+  const waNumber = (settings.wa || '+62 812-3456-7890').replace(/\D/g,'');
+
+  // ======= APPLY CMS DATA TO PAGE =======
+  // Hero
+  const heroHeadlineEl = document.querySelector('.hero-title');
+  if (heroHeadlineEl) heroHeadlineEl.innerHTML = hero.headline.replace(' untuk', '<br>untuk').replace(' Setiap', '<br><span>Setiap');
+  const heroSubEl = document.querySelector('.hero-sub');
+  if (heroSubEl) heroSubEl.textContent = hero.sub;
+  const heroBadgeEl = document.querySelector('.hero-badge');
+  if (heroBadgeEl) heroBadgeEl.textContent = hero.badge;
+  const heroPerksEl = document.querySelector('.hero-perks');
+  if (heroPerksEl && hero.perks) {
+    heroPerksEl.innerHTML = hero.perks.split(',').map(p => `<div class="hero-perk"><span>✓</span> ${p.trim()}</div>`).join('');
+  }
+  const heroStats = document.querySelectorAll('.hero-stat');
+  if (heroStats.length >= 2) {
+    heroStats[0].querySelector('.num').textContent = hero.stat1num;
+    heroStats[0].querySelector('.lbl').textContent = hero.stat1lbl;
+    heroStats[1].querySelector('.num').textContent = hero.stat2num;
+    heroStats[1].querySelector('.lbl').textContent = hero.stat2lbl;
+  }
+
+  // About
+  const aboutStatEl = document.querySelector('.about-float-card .num');
+  if (aboutStatEl) aboutStatEl.textContent = about.stat;
+  const aboutDescs = document.querySelectorAll('.about-content .section-sub');
+  if (aboutDescs[0]) aboutDescs[0].textContent = about.desc;
+  const aboutLongEl = document.querySelector('.about-content p[style]');
+
+  // Contact
+  const contactDetails = document.querySelectorAll('.contact-detail-text span');
+  if (contactDetails.length >= 3) {
+    contactDetails[0].textContent = settings.wa;
+    contactDetails[1].innerHTML = settings.alamat;
+    contactDetails[2].textContent = settings.email;
+  }
+  const hoursEls = document.querySelectorAll('.contact-hours p');
+  if (hoursEls[0]) hoursEls[0].innerHTML = `Senin – Sabtu: ${settings.jamWD}<br>Minggu & Hari Libur: ${settings.jamWE}`;
+
+  // WA Float visibility
+  const waFloat = document.querySelector('.wa-float');
+  if (waFloat) {
+    waFloat.href = `https://wa.me/${waNumber}?text=Halo%20Alif%20Catering%2C%20saya%20ingin%20memesan%20catering.`;
+    if (settings.showWAFloat === false) waFloat.style.display = 'none';
+  }
+
+  // Cart visibility
+  const cartBtn = document.querySelector('.nav-cart-btn');
+  if (cartBtn && settings.showCart === false) cartBtn.style.display = 'none';
+
+  // ======= RENDER PACKAGES =======
+  const grid = document.getElementById('packagesGrid');
+  packages.forEach(pkg => {
+    const el = document.createElement('div');
+    el.className = 'package-card reveal' + (pkg.featured ? ' featured' : '');
+    const wasvg = `<svg width="14" height="14" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+    el.innerHTML = `
+      ${pkg.featured ? '<div class="package-badge">⭐ TERLARIS</div>' : ''}
+      <div class="package-img" style="background:${pkg.color};height:200px;display:flex;align-items:center;justify-content:center;font-size:64px;" role="img" aria-label="${pkg.name}">${pkg.emoji}</div>
+      <div class="package-body">
+        <div class="package-name">${pkg.name}</div>
+        <p class="package-desc">${pkg.desc}</p>
+        <ul class="package-includes">${(pkg.includes||[]).map(i => `<li>${i}</li>`).join('')}</ul>
+        <div class="package-price">${formatRp(pkg.price)}</div>
+        <div class="package-price-note">${pkg.priceNote}</div>
+        <div class="package-btns">
+          <button class="btn-cart" onclick="addToCart(${pkg.id})">🛒 Keranjang</button>
+          <button class="btn-wa" onclick="orderPackageWA(${pkg.id})">${wasvg} Pesan WA</button>
+        </div>
+      </div>`;
+    grid.appendChild(el);
+  });
+
+  // ======= RENDER TESTIMONIALS =======
+  const testiGrid = document.querySelector('.testi-grid');
+  if (testiGrid) {
+    testiGrid.innerHTML = testis.map(t => `
+      <div class="testi-card reveal">
+        <div class="testi-stars">${'★'.repeat(t.rating)}${'☆'.repeat(5-t.rating)}</div>
+        <p class="testi-text">"${t.text}"</p>
+        <div class="testi-author">
+          <div class="testi-avatar">${t.avatar}</div>
+          <div><div class="testi-name">${t.name}</div><div class="testi-role">${t.role}</div></div>
+        </div>
+      </div>`).join('');
+  }
+
+  // ======= CART =======
+  let cart = {};
+  function formatRp(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
+
+  function addToCart(id) {
+    const pkg = packages.find(p => p.id === id);
+    if (!pkg) return;
+    cart[id] = cart[id] || { ...pkg, qty: 0 };
+    cart[id].qty++;
+    updateCartUI();
+    showToast(`✅ ${pkg.name} ditambahkan ke keranjang`);
+  }
+
+  function changeQty(id, delta) {
+    if (!cart[id]) return;
+    cart[id].qty += delta;
+    if (cart[id].qty <= 0) delete cart[id];
+    updateCartUI();
+  }
+
+  function removeItem(id) {
+    delete cart[id];
+    updateCartUI();
+  }
+
+  function updateCartUI() {
+    const items = Object.values(cart);
+    const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+    const count = items.reduce((s, i) => s + i.qty, 0);
+    const badge = document.getElementById('cartBadge');
+    badge.textContent = count;
+    badge.style.display = count > 0 ? 'flex' : 'none';
+    const container = document.getElementById('cartItems');
+    const footer = document.getElementById('cartFooter');
+    if (items.length === 0) {
+      container.innerHTML = `<div class="cart-empty"><div class="icon">🛒</div><p>Keranjang masih kosong</p><p style="font-size:13px;margin-top:6px;color:var(--gray-400)">Tambahkan paket favorit Anda</p></div>`;
+      footer.style.display = 'none';
+    } else {
+      container.innerHTML = items.map(item => `
+        <div class="cart-item">
+          <div class="cart-item-icon" style="background:${item.color};font-size:24px;">${item.emoji}</div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${formatRp(item.price * item.qty)}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+            <div class="qty-control">
+              <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+              <span class="qty-num">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+            </div>
+            <button class="qty-remove" onclick="removeItem(${item.id})">🗑️</button>
+          </div>
+        </div>`).join('');
+      document.getElementById('cartTotal').textContent = formatRp(total);
+      footer.style.display = 'block';
+    }
+  }
+
+  function toggleCart() {
+    document.getElementById('cartPanel').classList.toggle('open');
+    document.getElementById('cartOverlay').classList.toggle('open');
+  }
+
+  function checkout() {
+    const items = Object.values(cart);
+    if (!items.length) return;
+    let msg = 'Halo Alif Catering, saya ingin memesan:\n\n';
+    items.forEach(i => { msg += `• ${i.name} ${i.qty} pcs — ${formatRp(i.price * i.qty)}\n`; });
+    const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+    msg += `\nTotal: ${formatRp(total)}\n\nMohon konfirmasi pesanan saya. Terima kasih!`;
+    window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  function orderPackageWA(id) {
+    const pkg = packages.find(p => p.id === id);
+    const msg = `Halo Alif Catering, saya ingin memesan:\n• ${pkg.name}\n\nMohon informasi lebih lanjut. Terima kasih!`;
+    window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  function orderWA() {
+    window.open(`https://wa.me/${waNumber}?text=Halo%20Alif%20Catering%2C%20saya%20ingin%20memesan%20catering%20untuk%20acara%20saya.%20Bisa%20bantu%20saya%3F`, '_blank');
+  }
+
+  function submitForm() {
+    const nama = document.getElementById('nama').value;
+    const telp = document.getElementById('telp').value;
+    const acara = document.getElementById('acara').value;
+    const pesan = document.getElementById('pesan').value;
+    if (!nama || !telp) { showToast('⚠️ Isi nama dan nomor HP terlebih dahulu'); return; }
+    // Save to CMS messages
+    const msgs = CMS.get('ac_messages') || [];
+    msgs.unshift({ id: Date.now(), nama, hp: telp, acara: acara || '-', pesan: pesan || '-', waktu: new Date().toLocaleString('id-ID'), read: false });
+    CMS.set('ac_messages', msgs);
+    const msg = `Halo Alif Catering,\n\nNama: ${nama}\nNo HP: ${telp}\nJenis Acara: ${acara || '-'}\nPesan: ${pesan || '-'}\n\nTerima kasih!`;
+    window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+    document.getElementById('nama').value = '';
+    document.getElementById('telp').value = '';
+    document.getElementById('acara').value = '';
+    document.getElementById('pesan').value = '';
+    showToast('✅ Pesan terkirim! Kami akan segera menghubungi Anda.');
+  }
+
+  // ======= TOAST =======
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // ======= NAVBAR SCROLL =======
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // ======= MOBILE MENU =======
+  function toggleMobile() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+  function closeMobile() {
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // ======= SCROLL REVEAL =======
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  setTimeout(() => { document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }, 100);
+</script>
+</body>
+</html>
